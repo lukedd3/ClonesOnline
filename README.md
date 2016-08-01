@@ -117,3 +117,5 @@ By default everything is configured in the way that application should be able t
 ## Code statistics
 
 Some interesting facts about project code
+
+14268 lines of code (without comments and libraries)
