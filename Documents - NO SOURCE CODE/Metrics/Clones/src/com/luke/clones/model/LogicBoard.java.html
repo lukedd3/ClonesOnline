@@ -1,0 +1,253 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML>
+<HEAD>
+<LINK REL=STYLESHEET TYPE="text/css" HREF="../../../../stylesheet.css" TITLE="Style">
+<META NAME="GENERATOR" CONTENT="Java2HTML Version 1.5">
+<TITLE>com.luke.clones.model.LogicBoard (Java2HTML)</TITLE>
+</HEAD>
+<BODY><TABLE id="Header" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2" width="33%">&nbsp;</td>
+<td align="center" colspan="2" width="33%">
+<font size="4">LogicBoard.java</font>
+</td>
+<td align="right" colspan="2" width="33%">&nbsp;</td>
+</tr>
+</TABLE>
+<pre ID="Classes">
+<FONT ID="LN">1   </FONT><A NAME="1"></A><FONT ID="Package">package</FONT> com.luke.clones.model;
+<FONT ID="LN">2   </FONT><A NAME="2"></A>
+<FONT ID="LN">3   </FONT><A NAME="3"></A><FONT ID="Import">import</FONT> java.util.HashMap;
+<FONT ID="LN">4   </FONT><A NAME="4"></A>
+<FONT ID="LN">5   </FONT><A NAME="5"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/model/type/FieldType.java.html">com.luke.clones.model.type.FieldType</A>;
+<FONT ID="LN">6   </FONT><A NAME="6"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/model/type/PlayerType.java.html">com.luke.clones.model.type.PlayerType</A>;
+<FONT ID="LN">7   </FONT><A NAME="7"></A>
+<FONT ID="LN">8   </FONT><A NAME="8"></A><FONT ID="MultiLineComment">/* The MIT License (MIT)
+<FONT ID="LN">9   </FONT><A NAME="9"></A>
+<FONT ID="LN">10  </FONT><A NAME="10"></A>Copyright (c) 2016 £ukasz Dziak
+<FONT ID="LN">11  </FONT><A NAME="11"></A>
+<FONT ID="LN">12  </FONT><A NAME="12"></A>Permission is hereby granted, free of charge, to any person obtaining a copy
+<FONT ID="LN">13  </FONT><A NAME="13"></A>of this software and associated documentation files (the "Software"), to deal
+<FONT ID="LN">14  </FONT><A NAME="14"></A>in the Software without restriction, including without limitation the rights
+<FONT ID="LN">15  </FONT><A NAME="15"></A>to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<FONT ID="LN">16  </FONT><A NAME="16"></A>copies of the Software, and to permit persons to whom the Software is
+<FONT ID="LN">17  </FONT><A NAME="17"></A>furnished to do so, subject to the following conditions:
+<FONT ID="LN">18  </FONT><A NAME="18"></A>
+<FONT ID="LN">19  </FONT><A NAME="19"></A>The above copyright notice and this permission notice shall be included in all
+<FONT ID="LN">20  </FONT><A NAME="20"></A>copies or substantial portions of the Software.
+<FONT ID="LN">21  </FONT><A NAME="21"></A>
+<FONT ID="LN">22  </FONT><A NAME="22"></A>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<FONT ID="LN">23  </FONT><A NAME="23"></A>IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<FONT ID="LN">24  </FONT><A NAME="24"></A>FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<FONT ID="LN">25  </FONT><A NAME="25"></A>AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<FONT ID="LN">26  </FONT><A NAME="26"></A>LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<FONT ID="LN">27  </FONT><A NAME="27"></A>OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+<FONT ID="LN">28  </FONT><A NAME="28"></A>SOFTWARE. */</FONT>
+<FONT ID="LN">29  </FONT><A NAME="29"></A>
+<FONT ID="LN">30  </FONT><A NAME="30"></A><FONT ID="Public">public</FONT> <FONT ID="Class">class</FONT> LogicBoard {
+<FONT ID="LN">31  </FONT><A NAME="31"></A>    <FONT ID="Private">private</FONT> <FONT ID="Int">int</FONT> width, height;
+<FONT ID="LN">32  </FONT><A NAME="32"></A>    <FONT ID="Private">private</FONT> <A HREF="../../../../com/luke/clones/model/LogicField.java.html">LogicField</A>[][] field;
+<FONT ID="LN">33  </FONT><A NAME="33"></A>    <FONT ID="Private">private</FONT> HashMap&lt;<A HREF="../../../../com/luke/clones/model/type/PlayerType.java.html">PlayerType</A>, Integer&gt; ballCount;
+<FONT ID="LN">34  </FONT><A NAME="34"></A>    <FONT ID="Private">private</FONT> <FONT ID="Int">int</FONT> maxBallCount;
+<FONT ID="LN">35  </FONT><A NAME="35"></A>    
+<FONT ID="LN">36  </FONT><A NAME="36"></A>    <FONT ID="Public">public</FONT> LogicBoard(<FONT ID="Int">int</FONT> width, <FONT ID="Int">int</FONT> height){
+<FONT ID="LN">37  </FONT><A NAME="37"></A>        <FONT ID="This">this</FONT>.width = width;
+<FONT ID="LN">38  </FONT><A NAME="38"></A>        <FONT ID="This">this</FONT>.height = height;
+<FONT ID="LN">39  </FONT><A NAME="39"></A>        
+<FONT ID="LN">40  </FONT><A NAME="40"></A>        field = <FONT ID="New">new</FONT> <A HREF="../../../../com/luke/clones/model/LogicField.java.html">LogicField</A>[width][height];
+<FONT ID="LN">41  </FONT><A NAME="41"></A>        <FONT ID="For">for</FONT>(<FONT ID="Int">int</FONT> i=<FONT ID="IntegerLiteral">0</FONT>;i&lt;width;i++){
+<FONT ID="LN">42  </FONT><A NAME="42"></A>            <FONT ID="For">for</FONT>(<FONT ID="Int">int</FONT> j=<FONT ID="IntegerLiteral">0</FONT>; j&lt;height;j++){
+<FONT ID="LN">43  </FONT><A NAME="43"></A>                field[i][j] = <FONT ID="New">new</FONT> <A HREF="../../../../com/luke/clones/model/LogicField.java.html">LogicField</A>(FieldType.EMPTY, PlayerType.NONE);
+<FONT ID="LN">44  </FONT><A NAME="44"></A>            }
+<FONT ID="LN">45  </FONT><A NAME="45"></A>        }
+<FONT ID="LN">46  </FONT><A NAME="46"></A>        
+<FONT ID="LN">47  </FONT><A NAME="47"></A>        ballCount = <FONT ID="New">new</FONT> HashMap&lt;<A HREF="../../../../com/luke/clones/model/type/PlayerType.java.html">PlayerType</A>, Integer&gt;();
+<FONT ID="LN">48  </FONT><A NAME="48"></A>        ballCount.put(PlayerType.RED,<FONT ID="IntegerLiteral">0</FONT>);
+<FONT ID="LN">49  </FONT><A NAME="49"></A>        ballCount.put(PlayerType.GREEN,<FONT ID="IntegerLiteral">0</FONT>);
+<FONT ID="LN">50  </FONT><A NAME="50"></A>        ballCount.put(PlayerType.BLUE,<FONT ID="IntegerLiteral">0</FONT>);
+<FONT ID="LN">51  </FONT><A NAME="51"></A>        ballCount.put(PlayerType.ORANGE,<FONT ID="IntegerLiteral">0</FONT>);
+<FONT ID="LN">52  </FONT><A NAME="52"></A>        
+<FONT ID="LN">53  </FONT><A NAME="53"></A>        maxBallCount = width * height;
+<FONT ID="LN">54  </FONT><A NAME="54"></A>    }
+<FONT ID="LN">55  </FONT><A NAME="55"></A>    
+<FONT ID="LN">56  </FONT><A NAME="56"></A>    <FONT ID="Public">public</FONT> <FONT ID="Void">void</FONT> setFieldTypeSolid(<FONT ID="Int">int</FONT> posX, <FONT ID="Int">int</FONT> posY){
+<FONT ID="LN">57  </FONT><A NAME="57"></A>        <FONT ID="If">if</FONT>(posX&gt;=<FONT ID="IntegerLiteral">0</FONT> &amp;&amp; posY&gt;=<FONT ID="IntegerLiteral">0</FONT> &amp;&amp; posX&lt;width &amp;&amp; posY&lt;height){
+<FONT ID="LN">58  </FONT><A NAME="58"></A>                <FONT ID="If">if</FONT>(field[posX][posY].getFieldType()== FieldType.TAKEN){
+<FONT ID="LN">59  </FONT><A NAME="59"></A>                    ballCount.put(field[posX][posY].getPlayer(), ballCount.get(field[posX][posY].getPlayer())-<FONT ID="IntegerLiteral">1</FONT>);
+<FONT ID="LN">60  </FONT><A NAME="60"></A>                }
+<FONT ID="LN">61  </FONT><A NAME="61"></A>                field[posX][posY].setType(FieldType.SOLID);
+<FONT ID="LN">62  </FONT><A NAME="62"></A>                field[posX][posY].setPlayer(PlayerType.NONE);
+<FONT ID="LN">63  </FONT><A NAME="63"></A>        }
+<FONT ID="LN">64  </FONT><A NAME="64"></A>        <FONT ID="Else">else</FONT> <FONT ID="Throw">throw</FONT> <FONT ID="New">new</FONT> ArrayIndexOutOfBoundsException();
+<FONT ID="LN">65  </FONT><A NAME="65"></A>    }
+<FONT ID="LN">66  </FONT><A NAME="66"></A>    
+<FONT ID="LN">67  </FONT><A NAME="67"></A>    <FONT ID="Public">public</FONT> <FONT ID="Void">void</FONT> setFieldTypeEmpty(<FONT ID="Int">int</FONT> posX, <FONT ID="Int">int</FONT> posY){
+<FONT ID="LN">68  </FONT><A NAME="68"></A>        <FONT ID="If">if</FONT>(posX&gt;=<FONT ID="IntegerLiteral">0</FONT> &amp;&amp; posY&gt;=<FONT ID="IntegerLiteral">0</FONT> &amp;&amp; posX&lt;width &amp;&amp; posY&lt;height){
+<FONT ID="LN">69  </FONT><A NAME="69"></A>            <FONT ID="If">if</FONT>(field[posX][posY].getFieldType()!=FieldType.SOLID){
+<FONT ID="LN">70  </FONT><A NAME="70"></A>                <FONT ID="If">if</FONT>(field[posX][posY].getFieldType()== FieldType.TAKEN){
+<FONT ID="LN">71  </FONT><A NAME="71"></A>                    ballCount.put(field[posX][posY].getPlayer(), ballCount.get(field[posX][posY].getPlayer())-<FONT ID="IntegerLiteral">1</FONT>);
+<FONT ID="LN">72  </FONT><A NAME="72"></A>                }
+<FONT ID="LN">73  </FONT><A NAME="73"></A>                field[posX][posY].setType(FieldType.EMPTY);
+<FONT ID="LN">74  </FONT><A NAME="74"></A>                field[posX][posY].setPlayer(PlayerType.NONE);
+<FONT ID="LN">75  </FONT><A NAME="75"></A>            }
+<FONT ID="LN">76  </FONT><A NAME="76"></A>        }
+<FONT ID="LN">77  </FONT><A NAME="77"></A>        <FONT ID="Else">else</FONT> <FONT ID="Throw">throw</FONT> <FONT ID="New">new</FONT> ArrayIndexOutOfBoundsException();
+<FONT ID="LN">78  </FONT><A NAME="78"></A>    }
+<FONT ID="LN">79  </FONT><A NAME="79"></A>    
+<FONT ID="LN">80  </FONT><A NAME="80"></A>    <FONT ID="Public">public</FONT> <A HREF="../../../../com/luke/clones/model/type/FieldType.java.html">FieldType</A> getFieldType(<FONT ID="Int">int</FONT> posX, <FONT ID="Int">int</FONT> posY){
+<FONT ID="LN">81  </FONT><A NAME="81"></A>        <FONT ID="If">if</FONT>(posX&gt;=<FONT ID="IntegerLiteral">0</FONT> &amp;&amp; posY&gt;=<FONT ID="IntegerLiteral">0</FONT> &amp;&amp; posX&lt;width &amp;&amp; posY&lt;height){
+<FONT ID="LN">82  </FONT><A NAME="82"></A>            <FONT ID="Return">return</FONT> field[posX][posY].getFieldType();
+<FONT ID="LN">83  </FONT><A NAME="83"></A>        }
+<FONT ID="LN">84  </FONT><A NAME="84"></A>        <FONT ID="Else">else</FONT> <FONT ID="Throw">throw</FONT> <FONT ID="New">new</FONT> ArrayIndexOutOfBoundsException();
+<FONT ID="LN">85  </FONT><A NAME="85"></A>    }
+<FONT ID="LN">86  </FONT><A NAME="86"></A>    
+<FONT ID="LN">87  </FONT><A NAME="87"></A>    <FONT ID="Public">public</FONT> <FONT ID="Void">void</FONT> setFieldPlayer(<FONT ID="Int">int</FONT> posX, <FONT ID="Int">int</FONT> posY, <A HREF="../../../../com/luke/clones/model/type/PlayerType.java.html">PlayerType</A> playerType){
+<FONT ID="LN">88  </FONT><A NAME="88"></A>        <FONT ID="If">if</FONT>(posX&gt;=<FONT ID="IntegerLiteral">0</FONT> &amp;&amp; posY&gt;=<FONT ID="IntegerLiteral">0</FONT> &amp;&amp; posX&lt;width &amp;&amp; posY&lt;height){
+<FONT ID="LN">89  </FONT><A NAME="89"></A>            <FONT ID="If">if</FONT>(field[posX][posY].getFieldType()!=FieldType.SOLID){
+<FONT ID="LN">90  </FONT><A NAME="90"></A>                field[posX][posY].setPlayer(playerType);
+<FONT ID="LN">91  </FONT><A NAME="91"></A>                field[posX][posY].setType(FieldType.TAKEN);
+<FONT ID="LN">92  </FONT><A NAME="92"></A>                ballCount.put(playerType, ballCount.get(playerType)+<FONT ID="IntegerLiteral">1</FONT>);
+<FONT ID="LN">93  </FONT><A NAME="93"></A>            }
+<FONT ID="LN">94  </FONT><A NAME="94"></A>        }
+<FONT ID="LN">95  </FONT><A NAME="95"></A>        <FONT ID="Else">else</FONT> <FONT ID="Throw">throw</FONT> <FONT ID="New">new</FONT> ArrayIndexOutOfBoundsException();
+<FONT ID="LN">96  </FONT><A NAME="96"></A>    }
+<FONT ID="LN">97  </FONT><A NAME="97"></A>    
+<FONT ID="LN">98  </FONT><A NAME="98"></A>    <FONT ID="Public">public</FONT> <A HREF="../../../../com/luke/clones/model/type/PlayerType.java.html">PlayerType</A> getFieldPlayer(<FONT ID="Int">int</FONT> posX, <FONT ID="Int">int</FONT> posY){
+<FONT ID="LN">99  </FONT><A NAME="99"></A>        <FONT ID="If">if</FONT>(posX&gt;=<FONT ID="IntegerLiteral">0</FONT> &amp;&amp; posY&gt;=<FONT ID="IntegerLiteral">0</FONT> &amp;&amp; posX&lt;width &amp;&amp; posY&lt;height){
+<FONT ID="LN">100 </FONT><A NAME="100"></A>            <FONT ID="Return">return</FONT> field[posX][posY].getPlayer();
+<FONT ID="LN">101 </FONT><A NAME="101"></A>        }
+<FONT ID="LN">102 </FONT><A NAME="102"></A>        <FONT ID="Else">else</FONT> <FONT ID="Throw">throw</FONT> <FONT ID="New">new</FONT> ArrayIndexOutOfBoundsException();
+<FONT ID="LN">103 </FONT><A NAME="103"></A>    }
+<FONT ID="LN">104 </FONT><A NAME="104"></A>    
+<FONT ID="LN">105 </FONT><A NAME="105"></A>    <FONT ID="Public">public</FONT> <FONT ID="Boolean">boolean</FONT> isMovePossible(<FONT ID="Int">int</FONT> fromX,<FONT ID="Int">int</FONT> fromY,<FONT ID="Int">int</FONT> toX,<FONT ID="Int">int</FONT> toY){
+<FONT ID="LN">106 </FONT><A NAME="106"></A>        
+<FONT ID="LN">107 </FONT><A NAME="107"></A>        <FONT ID="If">if</FONT>(fromX == toX &amp;&amp; fromY == toY) <FONT ID="Return">return</FONT> <FONT ID="False">false</FONT>;
+<FONT ID="LN">108 </FONT><A NAME="108"></A>        
+<FONT ID="LN">109 </FONT><A NAME="109"></A>        <FONT ID="If">if</FONT>(fromX&lt;<FONT ID="IntegerLiteral">0</FONT> || fromY&lt;<FONT ID="IntegerLiteral">0</FONT> || fromX&gt;width-<FONT ID="IntegerLiteral">1</FONT> || fromY&gt;height-<FONT ID="IntegerLiteral">1</FONT>) <FONT ID="Return">return</FONT> <FONT ID="False">false</FONT>;
+<FONT ID="LN">110 </FONT><A NAME="110"></A>        
+<FONT ID="LN">111 </FONT><A NAME="111"></A>        <FONT ID="If">if</FONT>(field[fromX][fromY].getFieldType()!=FieldType.TAKEN) <FONT ID="Return">return</FONT> <FONT ID="False">false</FONT>;
+<FONT ID="LN">112 </FONT><A NAME="112"></A>        <FONT ID="If">if</FONT>(field[fromX][fromY].getPlayer()==PlayerType.NONE) <FONT ID="Return">return</FONT> <FONT ID="False">false</FONT>;
+<FONT ID="LN">113 </FONT><A NAME="113"></A>        
+<FONT ID="LN">114 </FONT><A NAME="114"></A>        <FONT ID="If">if</FONT>(toX&lt;<FONT ID="IntegerLiteral">0</FONT> || toY&lt;<FONT ID="IntegerLiteral">0</FONT> || toX&gt;width-<FONT ID="IntegerLiteral">1</FONT> || toY&gt;height-<FONT ID="IntegerLiteral">1</FONT>) <FONT ID="Return">return</FONT> <FONT ID="False">false</FONT>;
+<FONT ID="LN">115 </FONT><A NAME="115"></A>        
+<FONT ID="LN">116 </FONT><A NAME="116"></A>        <FONT ID="If">if</FONT>(field[toX][toY].getFieldType()!=FieldType.EMPTY) <FONT ID="Return">return</FONT> <FONT ID="False">false</FONT>;
+<FONT ID="LN">117 </FONT><A NAME="117"></A>        <FONT ID="If">if</FONT>(field[toX][toY].getPlayer()!=PlayerType.NONE) <FONT ID="Return">return</FONT> <FONT ID="False">false</FONT>;<FONT ID="SingleLineComment">//
+<FONT ID="LN">118 </FONT><A NAME="118"></A></FONT>        
+<FONT ID="LN">119 </FONT><A NAME="119"></A>        <FONT ID="Int">int</FONT> xDif = toX - fromX;
+<FONT ID="LN">120 </FONT><A NAME="120"></A>        <FONT ID="Int">int</FONT> yDif = toY - fromY;
+<FONT ID="LN">121 </FONT><A NAME="121"></A>        
+<FONT ID="LN">122 </FONT><A NAME="122"></A>        <FONT ID="If">if</FONT>(Math.abs(xDif)&gt;=<FONT ID="IntegerLiteral">0</FONT> &amp;&amp; Math.abs(xDif)&lt;=<FONT ID="IntegerLiteral">2</FONT> &amp;&amp; Math.abs(yDif)&gt;=<FONT ID="IntegerLiteral">0</FONT> &amp;&amp; Math.abs(yDif)&lt;=<FONT ID="IntegerLiteral">2</FONT>) <FONT ID="Return">return</FONT> <FONT ID="True">true</FONT>;
+<FONT ID="LN">123 </FONT><A NAME="123"></A>        <FONT ID="Else">else</FONT> <FONT ID="Return">return</FONT> <FONT ID="False">false</FONT>;
+<FONT ID="LN">124 </FONT><A NAME="124"></A>    }
+<FONT ID="LN">125 </FONT><A NAME="125"></A>
+<FONT ID="LN">126 </FONT><A NAME="126"></A>    <FONT ID="Public">public</FONT> <FONT ID="Boolean">boolean</FONT> isClonePossible(<FONT ID="Int">int</FONT> fromX,<FONT ID="Int">int</FONT> fromY,<FONT ID="Int">int</FONT> toX,<FONT ID="Int">int</FONT> toY){
+<FONT ID="LN">127 </FONT><A NAME="127"></A>        <FONT ID="If">if</FONT>(!isMovePossible(fromX, fromY, toX, toY)) <FONT ID="Return">return</FONT> <FONT ID="False">false</FONT>;
+<FONT ID="LN">128 </FONT><A NAME="128"></A>        <FONT ID="Else">else</FONT>{
+<FONT ID="LN">129 </FONT><A NAME="129"></A>            <FONT ID="Int">int</FONT> xDif = toX - fromX;
+<FONT ID="LN">130 </FONT><A NAME="130"></A>            <FONT ID="Int">int</FONT> yDif = toY - fromY;
+<FONT ID="LN">131 </FONT><A NAME="131"></A>            
+<FONT ID="LN">132 </FONT><A NAME="132"></A>            <FONT ID="If">if</FONT>(Math.abs(xDif)&gt;=<FONT ID="IntegerLiteral">0</FONT> &amp;&amp; Math.abs(xDif)&lt;=<FONT ID="IntegerLiteral">1</FONT> &amp;&amp; Math.abs(yDif)&gt;=<FONT ID="IntegerLiteral">0</FONT> &amp;&amp; Math.abs(yDif)&lt;=<FONT ID="IntegerLiteral">1</FONT>) <FONT ID="Return">return</FONT> <FONT ID="True">true</FONT>;
+<FONT ID="LN">133 </FONT><A NAME="133"></A>            <FONT ID="Else">else</FONT> <FONT ID="Return">return</FONT> <FONT ID="False">false</FONT>;
+<FONT ID="LN">134 </FONT><A NAME="134"></A>        }
+<FONT ID="LN">135 </FONT><A NAME="135"></A>    }
+<FONT ID="LN">136 </FONT><A NAME="136"></A>    
+<FONT ID="LN">137 </FONT><A NAME="137"></A>    <FONT ID="Public">public</FONT> <FONT ID="Boolean">boolean</FONT> isJumpPossible(<FONT ID="Int">int</FONT> fromX,<FONT ID="Int">int</FONT> fromY,<FONT ID="Int">int</FONT> toX,<FONT ID="Int">int</FONT> toY){
+<FONT ID="LN">138 </FONT><A NAME="138"></A>        <FONT ID="If">if</FONT>(!isMovePossible(fromX, fromY, toX, toY)) <FONT ID="Return">return</FONT> <FONT ID="False">false</FONT>;
+<FONT ID="LN">139 </FONT><A NAME="139"></A>        <FONT ID="Else">else</FONT>{
+<FONT ID="LN">140 </FONT><A NAME="140"></A>            <FONT ID="Int">int</FONT> xDif = toX - fromX;
+<FONT ID="LN">141 </FONT><A NAME="141"></A>            <FONT ID="Int">int</FONT> yDif = toY - fromY;
+<FONT ID="LN">142 </FONT><A NAME="142"></A>            
+<FONT ID="LN">143 </FONT><A NAME="143"></A>            <FONT ID="If">if</FONT>(Math.abs(xDif)&gt;=<FONT ID="IntegerLiteral">0</FONT> &amp;&amp; Math.abs(xDif)&lt;=<FONT ID="IntegerLiteral">1</FONT> &amp;&amp; Math.abs(yDif)&gt;=<FONT ID="IntegerLiteral">0</FONT> &amp;&amp; Math.abs(yDif)&lt;=<FONT ID="IntegerLiteral">1</FONT>) <FONT ID="Return">return</FONT> <FONT ID="False">false</FONT>;
+<FONT ID="LN">144 </FONT><A NAME="144"></A>            <FONT ID="Else">else</FONT> <FONT ID="Return">return</FONT> <FONT ID="True">true</FONT>;
+<FONT ID="LN">145 </FONT><A NAME="145"></A>        }
+<FONT ID="LN">146 </FONT><A NAME="146"></A>    }
+<FONT ID="LN">147 </FONT><A NAME="147"></A>    
+<FONT ID="LN">148 </FONT><A NAME="148"></A>    <FONT ID="Public">public</FONT> <FONT ID="Boolean">boolean</FONT> clone(<FONT ID="Int">int</FONT> fromX, <FONT ID="Int">int</FONT> fromY, <FONT ID="Int">int</FONT> toX, <FONT ID="Int">int</FONT> toY){
+<FONT ID="LN">149 </FONT><A NAME="149"></A>        <FONT ID="If">if</FONT>(isClonePossible(fromX, fromY, toX, toY)){
+<FONT ID="LN">150 </FONT><A NAME="150"></A>            field[toX][toY].setPlayer(field[fromX][fromY].getPlayer());
+<FONT ID="LN">151 </FONT><A NAME="151"></A>            field[toX][toY].setType(FieldType.TAKEN);
+<FONT ID="LN">152 </FONT><A NAME="152"></A>            ballCount.put(field[fromX][fromY].getPlayer(), ballCount.get(field[fromX][fromY].getPlayer())+<FONT ID="IntegerLiteral">1</FONT>);
+<FONT ID="LN">153 </FONT><A NAME="153"></A>            
+<FONT ID="LN">154 </FONT><A NAME="154"></A>            <FONT ID="For">for</FONT>(<FONT ID="Int">int</FONT> i=toX-<FONT ID="IntegerLiteral">1</FONT>; i&lt;=toX+<FONT ID="IntegerLiteral">1</FONT>; i++){
+<FONT ID="LN">155 </FONT><A NAME="155"></A>                <FONT ID="For">for</FONT>(<FONT ID="Int">int</FONT> j=toY-<FONT ID="IntegerLiteral">1</FONT>; j&lt;=toY+<FONT ID="IntegerLiteral">1</FONT>; j++){
+<FONT ID="LN">156 </FONT><A NAME="156"></A>                    <FONT ID="If">if</FONT>(i&gt;=<FONT ID="IntegerLiteral">0</FONT> &amp;&amp; i&lt;width &amp;&amp; j&gt;=<FONT ID="IntegerLiteral">0</FONT> &amp;&amp; j&lt;height &amp;&amp; !(i==toX &amp;&amp; j==toY) &amp;&amp; field[i][j].getFieldType() == FieldType.TAKEN){
+<FONT ID="LN">157 </FONT><A NAME="157"></A>                        ballCount.put(field[i][j].getPlayer(), ballCount.get(field[i][j].getPlayer())-<FONT ID="IntegerLiteral">1</FONT>);
+<FONT ID="LN">158 </FONT><A NAME="158"></A>                        ballCount.put(field[fromX][fromY].getPlayer(), ballCount.get(field[fromX][fromY].getPlayer())+<FONT ID="IntegerLiteral">1</FONT>);
+<FONT ID="LN">159 </FONT><A NAME="159"></A>                        field[i][j].setPlayer(field[fromX][fromY].getPlayer());
+<FONT ID="LN">160 </FONT><A NAME="160"></A>                    }
+<FONT ID="LN">161 </FONT><A NAME="161"></A>                }
+<FONT ID="LN">162 </FONT><A NAME="162"></A>            }
+<FONT ID="LN">163 </FONT><A NAME="163"></A>            
+<FONT ID="LN">164 </FONT><A NAME="164"></A>            <FONT ID="Return">return</FONT> <FONT ID="True">true</FONT>;
+<FONT ID="LN">165 </FONT><A NAME="165"></A>        }
+<FONT ID="LN">166 </FONT><A NAME="166"></A>        <FONT ID="Else">else</FONT> <FONT ID="Return">return</FONT> <FONT ID="False">false</FONT>;
+<FONT ID="LN">167 </FONT><A NAME="167"></A>    }
+<FONT ID="LN">168 </FONT><A NAME="168"></A>    
+<FONT ID="LN">169 </FONT><A NAME="169"></A>    <FONT ID="Public">public</FONT> <FONT ID="Boolean">boolean</FONT> jump(<FONT ID="Int">int</FONT> fromX, <FONT ID="Int">int</FONT> fromY, <FONT ID="Int">int</FONT> toX, <FONT ID="Int">int</FONT> toY){
+<FONT ID="LN">170 </FONT><A NAME="170"></A>        <FONT ID="If">if</FONT>(isJumpPossible(fromX, fromY, toX, toY)){
+<FONT ID="LN">171 </FONT><A NAME="171"></A>            field[toX][toY].setPlayer(field[fromX][fromY].getPlayer());
+<FONT ID="LN">172 </FONT><A NAME="172"></A>            field[toX][toY].setType(FieldType.TAKEN);
+<FONT ID="LN">173 </FONT><A NAME="173"></A>            
+<FONT ID="LN">174 </FONT><A NAME="174"></A>            <FONT ID="For">for</FONT>(<FONT ID="Int">int</FONT> i=toX-<FONT ID="IntegerLiteral">1</FONT>; i&lt;=toX+<FONT ID="IntegerLiteral">1</FONT>; i++){
+<FONT ID="LN">175 </FONT><A NAME="175"></A>                <FONT ID="For">for</FONT>(<FONT ID="Int">int</FONT> j=toY-<FONT ID="IntegerLiteral">1</FONT>; j&lt;=toY+<FONT ID="IntegerLiteral">1</FONT>; j++){ 
+<FONT ID="LN">176 </FONT><A NAME="176"></A>                    <FONT ID="If">if</FONT>(i&gt;=<FONT ID="IntegerLiteral">0</FONT> &amp;&amp; i&lt;width &amp;&amp; j&gt;=<FONT ID="IntegerLiteral">0</FONT> &amp;&amp; j&lt;height &amp;&amp; !(i==toX &amp;&amp; j==toY) &amp;&amp; field[i][j].getFieldType() == FieldType.TAKEN){
+<FONT ID="LN">177 </FONT><A NAME="177"></A>                        ballCount.put(field[i][j].getPlayer(), ballCount.get(field[i][j].getPlayer())-<FONT ID="IntegerLiteral">1</FONT>);
+<FONT ID="LN">178 </FONT><A NAME="178"></A>                        ballCount.put(field[fromX][fromY].getPlayer(), ballCount.get(field[fromX][fromY].getPlayer())+<FONT ID="IntegerLiteral">1</FONT>);
+<FONT ID="LN">179 </FONT><A NAME="179"></A>                        field[i][j].setPlayer(field[fromX][fromY].getPlayer());
+<FONT ID="LN">180 </FONT><A NAME="180"></A>                    }
+<FONT ID="LN">181 </FONT><A NAME="181"></A>                }
+<FONT ID="LN">182 </FONT><A NAME="182"></A>            }
+<FONT ID="LN">183 </FONT><A NAME="183"></A>            
+<FONT ID="LN">184 </FONT><A NAME="184"></A>            field[fromX][fromY].setPlayer(PlayerType.NONE);
+<FONT ID="LN">185 </FONT><A NAME="185"></A>            field[fromX][fromY].setType(FieldType.EMPTY);
+<FONT ID="LN">186 </FONT><A NAME="186"></A>            
+<FONT ID="LN">187 </FONT><A NAME="187"></A>            
+<FONT ID="LN">188 </FONT><A NAME="188"></A>            <FONT ID="Return">return</FONT> <FONT ID="True">true</FONT>;
+<FONT ID="LN">189 </FONT><A NAME="189"></A>        }
+<FONT ID="LN">190 </FONT><A NAME="190"></A>        <FONT ID="Else">else</FONT> <FONT ID="Return">return</FONT> <FONT ID="False">false</FONT>;
+<FONT ID="LN">191 </FONT><A NAME="191"></A>    }
+<FONT ID="LN">192 </FONT><A NAME="192"></A>
+<FONT ID="LN">193 </FONT><A NAME="193"></A>    <FONT ID="FormalComment">/**
+<FONT ID="LN">194 </FONT><A NAME="194"></A>     * Returns true when selected player  is able to move anywhere. You can use this method to skip
+<FONT ID="LN">195 </FONT><A NAME="195"></A>     * the turn if player can't move anywhere.
+<FONT ID="LN">196 </FONT><A NAME="196"></A>     * @param playerType
+<FONT ID="LN">197 </FONT><A NAME="197"></A>     * @return boolean
+<FONT ID="LN">198 </FONT><A NAME="198"></A>     */</FONT>
+<FONT ID="LN">199 </FONT><A NAME="199"></A>    <FONT ID="Public">public</FONT> <FONT ID="Boolean">boolean</FONT> isPlayerMoveable(<A HREF="../../../../com/luke/clones/model/type/PlayerType.java.html">PlayerType</A> playerType){
+<FONT ID="LN">200 </FONT><A NAME="200"></A>        <FONT ID="Boolean">boolean</FONT> moveable=<FONT ID="False">false</FONT>;
+<FONT ID="LN">201 </FONT><A NAME="201"></A>        
+<FONT ID="LN">202 </FONT><A NAME="202"></A>        <FONT ID="For">for</FONT>(<FONT ID="Int">int</FONT> i=<FONT ID="IntegerLiteral">0</FONT>;i&lt;width;i++){
+<FONT ID="LN">203 </FONT><A NAME="203"></A>            <FONT ID="For">for</FONT>(<FONT ID="Int">int</FONT> j=<FONT ID="IntegerLiteral">0</FONT>;j&lt;height;j++){
+<FONT ID="LN">204 </FONT><A NAME="204"></A>                <FONT ID="If">if</FONT>(field[i][j].getPlayer()==playerType){
+<FONT ID="LN">205 </FONT><A NAME="205"></A>                    <FONT ID="For">for</FONT>(<FONT ID="Int">int</FONT> k=i-<FONT ID="IntegerLiteral">2</FONT>;k&lt;=i+<FONT ID="IntegerLiteral">2</FONT>;k++){
+<FONT ID="LN">206 </FONT><A NAME="206"></A>                        <FONT ID="For">for</FONT>(<FONT ID="Int">int</FONT> l=j-<FONT ID="IntegerLiteral">2</FONT>;l&lt;=j+<FONT ID="IntegerLiteral">2</FONT>;l++){
+<FONT ID="LN">207 </FONT><A NAME="207"></A>                            <FONT ID="If">if</FONT>(k&gt;=<FONT ID="IntegerLiteral">0</FONT> &amp;&amp; l&gt;=<FONT ID="IntegerLiteral">0</FONT> &amp;&amp; k&lt;width &amp;&amp; l&lt;height){
+<FONT ID="LN">208 </FONT><A NAME="208"></A>                                <FONT ID="If">if</FONT>(field[k][l].getFieldType()==FieldType.EMPTY){
+<FONT ID="LN">209 </FONT><A NAME="209"></A>                                    moveable = <FONT ID="True">true</FONT>;
+<FONT ID="LN">210 </FONT><A NAME="210"></A>                                    <FONT ID="Break">break</FONT>;
+<FONT ID="LN">211 </FONT><A NAME="211"></A>                                }
+<FONT ID="LN">212 </FONT><A NAME="212"></A>                            }
+<FONT ID="LN">213 </FONT><A NAME="213"></A>                        }
+<FONT ID="LN">214 </FONT><A NAME="214"></A>                    }
+<FONT ID="LN">215 </FONT><A NAME="215"></A>                }
+<FONT ID="LN">216 </FONT><A NAME="216"></A>            }
+<FONT ID="LN">217 </FONT><A NAME="217"></A>        }
+<FONT ID="LN">218 </FONT><A NAME="218"></A>        
+<FONT ID="LN">219 </FONT><A NAME="219"></A>        <FONT ID="Return">return</FONT> moveable;
+<FONT ID="LN">220 </FONT><A NAME="220"></A>    }
+<FONT ID="LN">221 </FONT><A NAME="221"></A>    
+<FONT ID="LN">222 </FONT><A NAME="222"></A>    <FONT ID="Public">public</FONT> <FONT ID="Int">int</FONT> getWidth(){<FONT ID="Return">return</FONT> width;}
+<FONT ID="LN">223 </FONT><A NAME="223"></A>    
+<FONT ID="LN">224 </FONT><A NAME="224"></A>    <FONT ID="Public">public</FONT> <FONT ID="Int">int</FONT> getHeight(){<FONT ID="Return">return</FONT> height;}
+<FONT ID="LN">225 </FONT><A NAME="225"></A>    
+<FONT ID="LN">226 </FONT><A NAME="226"></A>    <FONT ID="Public">public</FONT> <FONT ID="Int">int</FONT> getBallCount(<A HREF="../../../../com/luke/clones/model/type/PlayerType.java.html">PlayerType</A> playerType){
+<FONT ID="LN">227 </FONT><A NAME="227"></A>        <FONT ID="Return">return</FONT> ballCount.get(playerType);
+<FONT ID="LN">228 </FONT><A NAME="228"></A>    }
+<FONT ID="LN">229 </FONT><A NAME="229"></A>    
+<FONT ID="LN">230 </FONT><A NAME="230"></A>    <FONT ID="Public">public</FONT> <FONT ID="Int">int</FONT> getMaxBallCount(){
+<FONT ID="LN">231 </FONT><A NAME="231"></A>        <FONT ID="Return">return</FONT> maxBallCount;
+<FONT ID="LN">232 </FONT><A NAME="232"></A>    }
+<FONT ID="LN">233 </FONT><A NAME="233"></A>}
+<FONT ID="LN">234 </FONT><A NAME="234"></A></pre>
+</BODY>
+</HTML>

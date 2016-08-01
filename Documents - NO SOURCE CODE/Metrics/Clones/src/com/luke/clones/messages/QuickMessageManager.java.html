@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML>
+<HEAD>
+<LINK REL=STYLESHEET TYPE="text/css" HREF="../../../../stylesheet.css" TITLE="Style">
+<META NAME="GENERATOR" CONTENT="Java2HTML Version 1.5">
+<TITLE>com.luke.clones.messages.QuickMessageManager (Java2HTML)</TITLE>
+</HEAD>
+<BODY><TABLE id="Header" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2" width="33%">&nbsp;</td>
+<td align="center" colspan="2" width="33%">
+<font size="4">QuickMessageManager.java</font>
+</td>
+<td align="right" colspan="2" width="33%">&nbsp;</td>
+</tr>
+</TABLE>
+<pre ID="Classes">
+<FONT ID="LN">1   </FONT><A NAME="1"></A><FONT ID="Package">package</FONT> com.luke.clones.messages;
+<FONT ID="LN">2   </FONT><A NAME="2"></A>
+<FONT ID="LN">3   </FONT><A NAME="3"></A><FONT ID="Import">import</FONT> com.badlogic.gdx.scenes.scene2d.Stage;
+<FONT ID="LN">4   </FONT><A NAME="4"></A><FONT ID="Import">import</FONT> com.badlogic.gdx.scenes.scene2d.ui.Table;
+<FONT ID="LN">5   </FONT><A NAME="5"></A>
+<FONT ID="LN">6   </FONT><A NAME="6"></A><FONT ID="MultiLineComment">/* The MIT License (MIT)
+<FONT ID="LN">7   </FONT><A NAME="7"></A>
+<FONT ID="LN">8   </FONT><A NAME="8"></A>Copyright (c) 2016 £ukasz Dziak
+<FONT ID="LN">9   </FONT><A NAME="9"></A>
+<FONT ID="LN">10  </FONT><A NAME="10"></A>Permission is hereby granted, free of charge, to any person obtaining a copy
+<FONT ID="LN">11  </FONT><A NAME="11"></A>of this software and associated documentation files (the "Software"), to deal
+<FONT ID="LN">12  </FONT><A NAME="12"></A>in the Software without restriction, including without limitation the rights
+<FONT ID="LN">13  </FONT><A NAME="13"></A>to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<FONT ID="LN">14  </FONT><A NAME="14"></A>copies of the Software, and to permit persons to whom the Software is
+<FONT ID="LN">15  </FONT><A NAME="15"></A>furnished to do so, subject to the following conditions:
+<FONT ID="LN">16  </FONT><A NAME="16"></A>
+<FONT ID="LN">17  </FONT><A NAME="17"></A>The above copyright notice and this permission notice shall be included in all
+<FONT ID="LN">18  </FONT><A NAME="18"></A>copies or substantial portions of the Software.
+<FONT ID="LN">19  </FONT><A NAME="19"></A>
+<FONT ID="LN">20  </FONT><A NAME="20"></A>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<FONT ID="LN">21  </FONT><A NAME="21"></A>IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<FONT ID="LN">22  </FONT><A NAME="22"></A>FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<FONT ID="LN">23  </FONT><A NAME="23"></A>AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<FONT ID="LN">24  </FONT><A NAME="24"></A>LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<FONT ID="LN">25  </FONT><A NAME="25"></A>OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+<FONT ID="LN">26  </FONT><A NAME="26"></A>SOFTWARE. */</FONT>
+<FONT ID="LN">27  </FONT><A NAME="27"></A>
+<FONT ID="LN">28  </FONT><A NAME="28"></A><FONT ID="Public">public</FONT> <FONT ID="Class">class</FONT> QuickMessageManager {
+<FONT ID="LN">29  </FONT><A NAME="29"></A>    
+<FONT ID="LN">30  </FONT><A NAME="30"></A>    <FONT ID="Public">public</FONT> <FONT ID="Static">static</FONT> <FONT ID="Void">void</FONT> showMessageOnSpecifiedStage(<A HREF="../../../../com/luke/clones/messages/QuickMessage.java.html">QuickMessage</A> quickMessage, Stage stage){
+<FONT ID="LN">31  </FONT><A NAME="31"></A>        quickMessage.prepareToShow();
+<FONT ID="LN">32  </FONT><A NAME="32"></A>        Table messageTable = quickMessage.getTable();
+<FONT ID="LN">33  </FONT><A NAME="33"></A>        stage.addActor(messageTable);
+<FONT ID="LN">34  </FONT><A NAME="34"></A>    }
+<FONT ID="LN">35  </FONT><A NAME="35"></A>    
+<FONT ID="LN">36  </FONT><A NAME="36"></A>}
+<FONT ID="LN">37  </FONT><A NAME="37"></A></pre>
+</BODY>
+</HTML>

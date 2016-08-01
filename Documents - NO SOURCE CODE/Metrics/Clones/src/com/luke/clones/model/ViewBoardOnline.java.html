@@ -1,0 +1,993 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML>
+<HEAD>
+<LINK REL=STYLESHEET TYPE="text/css" HREF="../../../../stylesheet.css" TITLE="Style">
+<META NAME="GENERATOR" CONTENT="Java2HTML Version 1.5">
+<TITLE>com.luke.clones.model.ViewBoardOnline (Java2HTML)</TITLE>
+</HEAD>
+<BODY><TABLE id="Header" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2" width="33%">&nbsp;</td>
+<td align="center" colspan="2" width="33%">
+<font size="4">ViewBoardOnline.java</font>
+</td>
+<td align="right" colspan="2" width="33%">&nbsp;</td>
+</tr>
+</TABLE>
+<pre ID="Classes">
+<FONT ID="LN">1   </FONT><A NAME="1"></A><FONT ID="Package">package</FONT> com.luke.clones.model;
+<FONT ID="LN">2   </FONT><A NAME="2"></A>
+<FONT ID="LN">3   </FONT><A NAME="3"></A><FONT ID="Import">import</FONT> java.util.ArrayList;
+<FONT ID="LN">4   </FONT><A NAME="4"></A><FONT ID="Import">import</FONT> java.util.HashMap;
+<FONT ID="LN">5   </FONT><A NAME="5"></A><FONT ID="Import">import</FONT> java.util.List;
+<FONT ID="LN">6   </FONT><A NAME="6"></A><FONT ID="Import">import</FONT> java.util.Timer;
+<FONT ID="LN">7   </FONT><A NAME="7"></A><FONT ID="Import">import</FONT> java.util.TimerTask;
+<FONT ID="LN">8   </FONT><A NAME="8"></A>
+<FONT ID="LN">9   </FONT><A NAME="9"></A><FONT ID="Import">import</FONT> com.badlogic.gdx.Gdx;
+<FONT ID="LN">10  </FONT><A NAME="10"></A><FONT ID="Import">import</FONT> com.badlogic.gdx.InputMultiplexer;
+<FONT ID="LN">11  </FONT><A NAME="11"></A><FONT ID="Import">import</FONT> com.badlogic.gdx.graphics.Color;
+<FONT ID="LN">12  </FONT><A NAME="12"></A><FONT ID="Import">import</FONT> com.badlogic.gdx.graphics.Texture;
+<FONT ID="LN">13  </FONT><A NAME="13"></A><FONT ID="Import">import</FONT> com.badlogic.gdx.graphics.Texture.TextureFilter;
+<FONT ID="LN">14  </FONT><A NAME="14"></A><FONT ID="Import">import</FONT> com.badlogic.gdx.graphics.g2d.Batch;
+<FONT ID="LN">15  </FONT><A NAME="15"></A><FONT ID="Import">import</FONT> com.badlogic.gdx.graphics.g2d.SpriteBatch;
+<FONT ID="LN">16  </FONT><A NAME="16"></A><FONT ID="Import">import</FONT> com.badlogic.gdx.scenes.scene2d.Actor;
+<FONT ID="LN">17  </FONT><A NAME="17"></A><FONT ID="Import">import</FONT> com.badlogic.gdx.scenes.scene2d.InputEvent;
+<FONT ID="LN">18  </FONT><A NAME="18"></A><FONT ID="Import">import</FONT> com.badlogic.gdx.scenes.scene2d.Stage;
+<FONT ID="LN">19  </FONT><A NAME="19"></A><FONT ID="Import">import</FONT> com.badlogic.gdx.scenes.scene2d.ui.Label;
+<FONT ID="LN">20  </FONT><A NAME="20"></A><FONT ID="Import">import</FONT> com.badlogic.gdx.scenes.scene2d.ui.Skin;
+<FONT ID="LN">21  </FONT><A NAME="21"></A><FONT ID="Import">import</FONT> com.badlogic.gdx.scenes.scene2d.ui.Table;
+<FONT ID="LN">22  </FONT><A NAME="22"></A><FONT ID="Import">import</FONT> com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+<FONT ID="LN">23  </FONT><A NAME="23"></A><FONT ID="Import">import</FONT> com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+<FONT ID="LN">24  </FONT><A NAME="24"></A><FONT ID="Import">import</FONT> com.badlogic.gdx.utils.viewport.FitViewport;
+<FONT ID="LN">25  </FONT><A NAME="25"></A><FONT ID="Import">import</FONT> com.badlogic.gdx.utils.viewport.Viewport;
+<FONT ID="LN">26  </FONT><A NAME="26"></A><FONT ID="Import">import</FONT> com.esotericsoftware.kryonet.Connection;
+<FONT ID="LN">27  </FONT><A NAME="27"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/ads/InterstitialAdsManager.java.html">com.luke.clones.ads.InterstitialAdsManager</A>;
+<FONT ID="LN">28  </FONT><A NAME="28"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/chart/TableChart.java.html">com.luke.clones.chart.TableChart</A>;
+<FONT ID="LN">29  </FONT><A NAME="29"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/chart/TableProgressBarCreator.java.html">com.luke.clones.chart.TableProgressBarCreator</A>;
+<FONT ID="LN">30  </FONT><A NAME="30"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/config/Config.java.html">com.luke.clones.config.Config</A>;
+<FONT ID="LN">31  </FONT><A NAME="31"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/config/ConfigUtils.java.html">com.luke.clones.config.ConfigUtils</A>;
+<FONT ID="LN">32  </FONT><A NAME="32"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/messages/QuickMessage.java.html">com.luke.clones.messages.QuickMessage</A>;
+<FONT ID="LN">33  </FONT><A NAME="33"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/messages/QuickMessagePresets.java.html">com.luke.clones.messages.QuickMessagePresets</A>;
+<FONT ID="LN">34  </FONT><A NAME="34"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/messages/QuickMessageUtil.java.html">com.luke.clones.messages.QuickMessageUtil</A>;
+<FONT ID="LN">35  </FONT><A NAME="35"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/model/SingleStat.java.html">com.luke.clones.model.SingleStat.TurnStatsArgumentException</A>;
+<FONT ID="LN">36  </FONT><A NAME="36"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/model/actor/FieldActor2.java.html">com.luke.clones.model.actor.FieldActor2</A>;
+<FONT ID="LN">37  </FONT><A NAME="37"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/model/actor/HighlightActor.java.html">com.luke.clones.model.actor.HighlightActor</A>;
+<FONT ID="LN">38  </FONT><A NAME="38"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/model/actor/HighlightActorAnimatedColorChange.java.html">com.luke.clones.model.actor.HighlightActorAnimatedColorChange</A>;
+<FONT ID="LN">39  </FONT><A NAME="39"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/model/button/ButtonBar.java.html">com.luke.clones.model.button.ButtonBar</A>;
+<FONT ID="LN">40  </FONT><A NAME="40"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/model/button/CustomDialog.java.html">com.luke.clones.model.button.CustomDialog</A>;
+<FONT ID="LN">41  </FONT><A NAME="41"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/model/button/ImgButton.java.html">com.luke.clones.model.button.ImgButton</A>;
+<FONT ID="LN">42  </FONT><A NAME="42"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/model/button/StatusBar.java.html">com.luke.clones.model.button.StatusBar</A>;
+<FONT ID="LN">43  </FONT><A NAME="43"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/model/button/StatusBarOnline.java.html">com.luke.clones.model.button.StatusBarOnline</A>;
+<FONT ID="LN">44  </FONT><A NAME="44"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/model/type/FieldType.java.html">com.luke.clones.model.type.FieldType</A>;
+<FONT ID="LN">45  </FONT><A NAME="45"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/model/type/PlayerPosition.java.html">com.luke.clones.model.type.PlayerPosition</A>;
+<FONT ID="LN">46  </FONT><A NAME="46"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/model/type/PlayerType.java.html">com.luke.clones.model.type.PlayerType</A>;
+<FONT ID="LN">47  </FONT><A NAME="47"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/model/type/Position.java.html">com.luke.clones.model.type.Position</A>;
+<FONT ID="LN">48  </FONT><A NAME="48"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/model/type/Turn.java.html">com.luke.clones.model.type.Turn</A>;
+<FONT ID="LN">49  </FONT><A NAME="49"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/network/communication/ActionTypeBoard.java.html">com.luke.clones.network.communication.ActionTypeBoard</A>;
+<FONT ID="LN">50  </FONT><A NAME="50"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/network/communication/ActionTypeGame.java.html">com.luke.clones.network.communication.ActionTypeGame</A>;
+<FONT ID="LN">51  </FONT><A NAME="51"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/network/communication/ActionTypeMove.java.html">com.luke.clones.network.communication.ActionTypeMove</A>;
+<FONT ID="LN">52  </FONT><A NAME="52"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/network/communication/ActionTypeMoveRoom.java.html">com.luke.clones.network.communication.ActionTypeMoveRoom</A>;
+<FONT ID="LN">53  </FONT><A NAME="53"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/network/communication/ActionTypeUpdateRoom.java.html">com.luke.clones.network.communication.ActionTypeUpdateRoom</A>;
+<FONT ID="LN">54  </FONT><A NAME="54"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/network/communication/GameOver.java.html">com.luke.clones.network.communication.GameOver</A>;
+<FONT ID="LN">55  </FONT><A NAME="55"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/network/communication/GameStart.java.html">com.luke.clones.network.communication.GameStart</A>;
+<FONT ID="LN">56  </FONT><A NAME="56"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/network/communication/MessageToShowType.java.html">com.luke.clones.network.communication.MessageToShowType</A>;
+<FONT ID="LN">57  </FONT><A NAME="57"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/network/communication/MoveBoard.java.html">com.luke.clones.network.communication.MoveBoard</A>;
+<FONT ID="LN">58  </FONT><A NAME="58"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/network/communication/MoveRoom.java.html">com.luke.clones.network.communication.MoveRoom</A>;
+<FONT ID="LN">59  </FONT><A NAME="59"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/network/communication/RoomInfo.java.html">com.luke.clones.network.communication.RoomInfo</A>;
+<FONT ID="LN">60  </FONT><A NAME="60"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/network/communication/Token.java.html">com.luke.clones.network.communication.Token</A>;
+<FONT ID="LN">61  </FONT><A NAME="61"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/network/communication/UpdateBoard.java.html">com.luke.clones.network.communication.UpdateBoard</A>;
+<FONT ID="LN">62  </FONT><A NAME="62"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/network/communication/UpdateGame.java.html">com.luke.clones.network.communication.UpdateGame</A>;
+<FONT ID="LN">63  </FONT><A NAME="63"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/network/communication/UpdateRoom.java.html">com.luke.clones.network.communication.UpdateRoom</A>;
+<FONT ID="LN">64  </FONT><A NAME="64"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/network/config/NetworkConfig.java.html">com.luke.clones.network.config.NetworkConfig</A>;
+<FONT ID="LN">65  </FONT><A NAME="65"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/network/interfaces/ListenerService.java.html">com.luke.clones.network.interfaces.ListenerService</A>;
+<FONT ID="LN">66  </FONT><A NAME="66"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/screen/StartScreen.java.html">com.luke.clones.screen.StartScreen</A>;
+<FONT ID="LN">67  </FONT><A NAME="67"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/sound/SoundManager.java.html">com.luke.clones.sound.SoundManager</A>;
+<FONT ID="LN">68  </FONT><A NAME="68"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/clones/sound/SoundType.java.html">com.luke.clones.sound.SoundType</A>;
+<FONT ID="LN">69  </FONT><A NAME="69"></A><FONT ID="Import">import</FONT> <A HREF="../../../../com/luke/network/controller/ClonesClient.java.html">com.luke.network.controller.ClonesClient</A>;
+<FONT ID="LN">70  </FONT><A NAME="70"></A>
+<FONT ID="LN">71  </FONT><A NAME="71"></A><FONT ID="MultiLineComment">/* The MIT License (MIT)
+<FONT ID="LN">72  </FONT><A NAME="72"></A>
+<FONT ID="LN">73  </FONT><A NAME="73"></A>Copyright (c) 2016 £ukasz Dziak
+<FONT ID="LN">74  </FONT><A NAME="74"></A>
+<FONT ID="LN">75  </FONT><A NAME="75"></A>Permission is hereby granted, free of charge, to any person obtaining a copy
+<FONT ID="LN">76  </FONT><A NAME="76"></A>of this software and associated documentation files (the "Software"), to deal
+<FONT ID="LN">77  </FONT><A NAME="77"></A>in the Software without restriction, including without limitation the rights
+<FONT ID="LN">78  </FONT><A NAME="78"></A>to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<FONT ID="LN">79  </FONT><A NAME="79"></A>copies of the Software, and to permit persons to whom the Software is
+<FONT ID="LN">80  </FONT><A NAME="80"></A>furnished to do so, subject to the following conditions:
+<FONT ID="LN">81  </FONT><A NAME="81"></A>
+<FONT ID="LN">82  </FONT><A NAME="82"></A>The above copyright notice and this permission notice shall be included in all
+<FONT ID="LN">83  </FONT><A NAME="83"></A>copies or substantial portions of the Software.
+<FONT ID="LN">84  </FONT><A NAME="84"></A>
+<FONT ID="LN">85  </FONT><A NAME="85"></A>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<FONT ID="LN">86  </FONT><A NAME="86"></A>IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<FONT ID="LN">87  </FONT><A NAME="87"></A>FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<FONT ID="LN">88  </FONT><A NAME="88"></A>AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<FONT ID="LN">89  </FONT><A NAME="89"></A>LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<FONT ID="LN">90  </FONT><A NAME="90"></A>OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+<FONT ID="LN">91  </FONT><A NAME="91"></A>SOFTWARE. */</FONT>
+<FONT ID="LN">92  </FONT><A NAME="92"></A>
+<FONT ID="LN">93  </FONT><A NAME="93"></A><FONT ID="Public">public</FONT> <FONT ID="Class">class</FONT> ViewBoardOnline <FONT ID="Implements">implements</FONT> <A HREF="../../../../com/luke/clones/network/interfaces/ListenerService.java.html">ListenerService</A>{
+<FONT ID="LN">94  </FONT><A NAME="94"></A>    <FONT ID="Private">private</FONT> <FONT ID="Int">int</FONT> screenWidth, screenHeight;
+<FONT ID="LN">95  </FONT><A NAME="95"></A>    <FONT ID="Private">private</FONT> <A HREF="../../../../com/luke/clones/model/LogicBoard.java.html">LogicBoard</A> board;
+<FONT ID="LN">96  </FONT><A NAME="96"></A>    <FONT ID="Private">private</FONT> Viewport mainViewport, layerViewport, messageViewport;
+<FONT ID="LN">97  </FONT><A NAME="97"></A>    <FONT ID="Private">private</FONT> <FONT ID="Volatile">volatile</FONT> Stage mainStage, layerStage, messageStage;
+<FONT ID="LN">98  </FONT><A NAME="98"></A>    <FONT ID="Private">private</FONT> <FONT ID="Int">int</FONT> fieldSize;
+<FONT ID="LN">99  </FONT><A NAME="99"></A>    <FONT ID="Private">private</FONT> FieldListener fieldListener;
+<FONT ID="LN">100 </FONT><A NAME="100"></A>    <FONT ID="Private">private</FONT> <FONT ID="Int">int</FONT> unusedSpace;
+<FONT ID="LN">101 </FONT><A NAME="101"></A>    <FONT ID="Private">private</FONT> <A HREF="../../../../com/luke/clones/model/type/Turn.java.html">Turn</A> turn;
+<FONT ID="LN">102 </FONT><A NAME="102"></A>    <FONT ID="Private">private</FONT> <A HREF="../../../../com/luke/clones/model/type/PlayerPosition.java.html">PlayerPosition</A> clickedPlayerPosition;
+<FONT ID="LN">103 </FONT><A NAME="103"></A>    <FONT ID="Private">private</FONT> <A HREF="../../../../com/luke/clones/model/button/StatusBar.java.html">StatusBar</A> statusBar;
+<FONT ID="LN">104 </FONT><A NAME="104"></A>    <FONT ID="Private">private</FONT> HashMap&lt;<A HREF="../../../../com/luke/clones/model/type/PlayerPosition.java.html">Position</A>,<A HREF="../../../../com/luke/clones/model/actor/FieldActor2.java.html">FieldActor2</A>&gt; fieldMap;
+<FONT ID="LN">105 </FONT><A NAME="105"></A>    <FONT ID="Private">private</FONT> Texture emptyTexture, solidTexture, ballTexture;
+<FONT ID="LN">106 </FONT><A NAME="106"></A>    
+<FONT ID="LN">107 </FONT><A NAME="107"></A>    <FONT ID="Private">private</FONT> <A HREF="../../../../com/luke/network/controller/ClonesClient.java.html">ClonesClient</A> clonesClient;
+<FONT ID="LN">108 </FONT><A NAME="108"></A>    <FONT ID="Private">private</FONT> <A HREF="../../../../com/luke/clones/model/type/PlayerType.java.html">PlayerType</A> playerColor;
+<FONT ID="LN">109 </FONT><A NAME="109"></A>    
+<FONT ID="LN">110 </FONT><A NAME="110"></A>    <FONT ID="Private">private</FONT> <A HREF="../../../../com/luke/clones/screen/StartScreen.java.html">StartScreen</A> startScreen;
+<FONT ID="LN">111 </FONT><A NAME="111"></A>    
+<FONT ID="LN">112 </FONT><A NAME="112"></A>    <FONT ID="Private">private</FONT> <A HREF="../../../../com/luke/clones/network/communication/RoomInfo.java.html">RoomInfo</A> roomInfo;
+<FONT ID="LN">113 </FONT><A NAME="113"></A>    <FONT ID="Private">private</FONT> String playerName;
+<FONT ID="LN">114 </FONT><A NAME="114"></A>    
+<FONT ID="LN">115 </FONT><A NAME="115"></A>    <FONT ID="Private">private</FONT> Skin skin, smallSkin;
+<FONT ID="LN">116 </FONT><A NAME="116"></A>    <FONT ID="Private">private</FONT> Texture selectTexture;
+<FONT ID="LN">117 </FONT><A NAME="117"></A>    <FONT ID="Private">private</FONT> Texture markBallTexture;
+<FONT ID="LN">118 </FONT><A NAME="118"></A>    
+<FONT ID="LN">119 </FONT><A NAME="119"></A>    <FONT ID="Private">private</FONT> <A HREF="../../../../com/luke/clones/model/button/CustomDialog.java.html">CustomDialog</A> socialDialog, optionsDialog;
+<FONT ID="LN">120 </FONT><A NAME="120"></A>    
+<FONT ID="LN">121 </FONT><A NAME="121"></A>    <FONT ID="Private">private</FONT> InputMultiplexer inputMultiplexer;
+<FONT ID="LN">122 </FONT><A NAME="122"></A>    <FONT ID="Private">private</FONT> <A HREF="../../../../com/luke/clones/model/SpecialKeyHandler.java.html">SpecialKeyHandler</A> specialKeyHandler;
+<FONT ID="LN">123 </FONT><A NAME="123"></A>    
+<FONT ID="LN">124 </FONT><A NAME="124"></A>    <FONT ID="Private">private</FONT> Table endTable;
+<FONT ID="LN">125 </FONT><A NAME="125"></A>    
+<FONT ID="LN">126 </FONT><A NAME="126"></A>    <FONT ID="Private">private</FONT> <A HREF="../../../../com/luke/clones/sound/SoundManager.java.html">SoundManager</A> soundManager = SoundManager.INSTANCE;
+<FONT ID="LN">127 </FONT><A NAME="127"></A>    <FONT ID="Private">private</FONT> <A HREF="../../../../com/luke/clones/chart/TableProgressBarCreator.java.html">TableProgressBarCreator</A> tableProgressBarCreator;
+<FONT ID="LN">128 </FONT><A NAME="128"></A>    
+<FONT ID="LN">129 </FONT><A NAME="129"></A>    <FONT ID="Private">private</FONT> <A HREF="../../../../com/luke/clones/chart/TableChart.java.html">TableChart</A> timeBar;
+<FONT ID="LN">130 </FONT><A NAME="130"></A>    <FONT ID="Private">private</FONT> <A HREF="../../../../com/luke/clones/model/TimeMeasure.java.html">TimeMeasure</A> playerMoveTime;
+<FONT ID="LN">131 </FONT><A NAME="131"></A>    <FONT ID="Private">private</FONT> Actor playerMoveTimeActor;
+<FONT ID="LN">132 </FONT><A NAME="132"></A>    
+<FONT ID="LN">133 </FONT><A NAME="133"></A>    <FONT ID="Private">private</FONT> <FONT ID="Volatile">volatile</FONT> <A HREF="../../../../com/luke/clones/model/TimeMeasure.java.html">TimeMeasure</A> nextRoundAutoStartTimeMeasure;
+<FONT ID="LN">134 </FONT><A NAME="134"></A>    <FONT ID="Private">private</FONT> Timer nextRoundAutoStartTimer;
+<FONT ID="LN">135 </FONT><A NAME="135"></A>    <FONT ID="Private">private</FONT> <FONT ID="Volatile">volatile</FONT> Label nextRoundAutoStartTimeLabel;
+<FONT ID="LN">136 </FONT><A NAME="136"></A>    
+<FONT ID="LN">137 </FONT><A NAME="137"></A>    <FONT ID="Private">private</FONT> <A HREF="../../../../com/luke/clones/ads/InterstitialAdsManager.java.html">InterstitialAdsManager</A> interstitialAdsManager = InterstitialAdsManager.INSTANCE;
+<FONT ID="LN">138 </FONT><A NAME="138"></A>    
+<FONT ID="LN">139 </FONT><A NAME="139"></A>    <FONT ID="Public">public</FONT> ViewBoardOnline(<A HREF="../../../../com/luke/network/controller/ClonesClient.java.html">ClonesClient</A> clonesClient, <A HREF="../../../../com/luke/clones/model/Map.java.html">Map</A> map, <A HREF="../../../../com/luke/clones/model/type/PlayerType.java.html">PlayerType</A> playerColor, <A HREF="../../../../com/luke/clones/network/communication/Token.java.html">Token</A> token, <A HREF="../../../../com/luke/clones/network/communication/RoomInfo.java.html">RoomInfo</A> roomInfo, String playerName, <A HREF="../../../../com/luke/clones/screen/StartScreen.java.html">StartScreen</A> startScreen, <A HREF="../../../../com/luke/clones/model/type/PlayerType.java.html">PlayerType</A>[] playerTypeOrder) {
+<FONT ID="LN">140 </FONT><A NAME="140"></A>        construct(clonesClient, map, playerColor, token, roomInfo, playerName, startScreen, playerTypeOrder, <FONT ID="False">false</FONT>);
+<FONT ID="LN">141 </FONT><A NAME="141"></A>    }
+<FONT ID="LN">142 </FONT><A NAME="142"></A>    
+<FONT ID="LN">143 </FONT><A NAME="143"></A>    <FONT ID="Public">public</FONT> <FONT ID="Synchronized">synchronized</FONT> <FONT ID="Void">void</FONT> construct(<A HREF="../../../../com/luke/network/controller/ClonesClient.java.html">ClonesClient</A> clonesClient, <A HREF="../../../../com/luke/clones/model/Map.java.html">Map</A> map, <A HREF="../../../../com/luke/clones/model/type/PlayerType.java.html">PlayerType</A> playerColor, <A HREF="../../../../com/luke/clones/network/communication/Token.java.html">Token</A> token, <A HREF="../../../../com/luke/clones/network/communication/RoomInfo.java.html">RoomInfo</A> roomInfo, String playerName, <A HREF="../../../../com/luke/clones/screen/StartScreen.java.html">StartScreen</A> startScreen, <A HREF="../../../../com/luke/clones/model/type/PlayerType.java.html">PlayerType</A>[] playerTypeOrder, <FONT ID="Boolean">boolean</FONT> restart) {
+<FONT ID="LN">144 </FONT><A NAME="144"></A>        <FONT ID="This">this</FONT>.clonesClient = clonesClient;
+<FONT ID="LN">145 </FONT><A NAME="145"></A>        <FONT ID="This">this</FONT>.playerColor = playerColor;
+<FONT ID="LN">146 </FONT><A NAME="146"></A>        <FONT ID="This">this</FONT>.startScreen = startScreen;
+<FONT ID="LN">147 </FONT><A NAME="147"></A>        <FONT ID="This">this</FONT>.roomInfo = roomInfo;
+<FONT ID="LN">148 </FONT><A NAME="148"></A>        <FONT ID="This">this</FONT>.playerName = playerName;
+<FONT ID="LN">149 </FONT><A NAME="149"></A>        clonesClient.setListener(<FONT ID="This">this</FONT>);
+<FONT ID="LN">150 </FONT><A NAME="150"></A>        init(map.getWidth(),map.getHeight(),map.getStartSolids(),map.getStartPlayers(), token.getPlayerType(), playerTypeOrder, restart);
+<FONT ID="LN">151 </FONT><A NAME="151"></A>    }
+<FONT ID="LN">152 </FONT><A NAME="152"></A>    
+<FONT ID="LN">153 </FONT><A NAME="153"></A>    <FONT ID="Private">private</FONT> <FONT ID="Synchronized">synchronized</FONT> <FONT ID="Void">void</FONT> init(<FONT ID="Int">int</FONT> boardWidth, <FONT ID="Int">int</FONT> boardHeight, <A HREF="../../../../com/luke/clones/model/type/PlayerPosition.java.html">Position</A>[] startSolids, <A HREF="../../../../com/luke/clones/model/type/PlayerPosition.java.html">PlayerPosition</A>[] startPlayers, <A HREF="../../../../com/luke/clones/model/type/PlayerType.java.html">PlayerType</A> startingPlayer, <A HREF="../../../../com/luke/clones/model/type/PlayerType.java.html">PlayerType</A>[] playerTypeOrder, <FONT ID="Boolean">boolean</FONT> restart){
+<FONT ID="LN">154 </FONT><A NAME="154"></A>        Config.log(<FONT ID="StringLiteral">"in init"</FONT>);
+<FONT ID="LN">155 </FONT><A NAME="155"></A>        skin = <FONT ID="New">new</FONT> Skin(Gdx.files.internal(<FONT ID="StringLiteral">"data/skins/skin_medium.json"</FONT>));
+<FONT ID="LN">156 </FONT><A NAME="156"></A>        smallSkin = <FONT ID="New">new</FONT> Skin(Gdx.files.internal(<FONT ID="StringLiteral">"data/skins/skin_small.json"</FONT>));
+<FONT ID="LN">157 </FONT><A NAME="157"></A>        
+<FONT ID="LN">158 </FONT><A NAME="158"></A>        screenWidth = Config.width - Config.widthOffset;
+<FONT ID="LN">159 </FONT><A NAME="159"></A>        screenHeight = Config.height - Config.gameHeightOffset - Config.timeBarHeight;
+<FONT ID="LN">160 </FONT><A NAME="160"></A>        
+<FONT ID="LN">161 </FONT><A NAME="161"></A>        board = <FONT ID="New">new</FONT> <A HREF="../../../../com/luke/clones/model/LogicBoard.java.html">LogicBoard</A>(boardWidth,boardHeight);
+<FONT ID="LN">162 </FONT><A NAME="162"></A>        
+<FONT ID="LN">163 </FONT><A NAME="163"></A>        <FONT ID="If">if</FONT>(startSolids != <FONT ID="Null">null</FONT>){
+<FONT ID="LN">164 </FONT><A NAME="164"></A>            <FONT ID="For">for</FONT>(<FONT ID="Int">int</FONT> i=<FONT ID="IntegerLiteral">0</FONT>; i&lt;startSolids.length; i++){
+<FONT ID="LN">165 </FONT><A NAME="165"></A>                board.setFieldTypeSolid(startSolids[i].getX(), startSolids[i].getY());
+<FONT ID="LN">166 </FONT><A NAME="166"></A>            }
+<FONT ID="LN">167 </FONT><A NAME="167"></A>        }
+<FONT ID="LN">168 </FONT><A NAME="168"></A>        
+<FONT ID="LN">169 </FONT><A NAME="169"></A>        <FONT ID="For">for</FONT>(<FONT ID="Int">int</FONT> i=<FONT ID="IntegerLiteral">0</FONT>; i&lt;startPlayers.length; i++){
+<FONT ID="LN">170 </FONT><A NAME="170"></A>            board.setFieldPlayer(startPlayers[i].getX(), startPlayers[i].getY(), startPlayers[i].getPlayerType());
+<FONT ID="LN">171 </FONT><A NAME="171"></A>        }
+<FONT ID="LN">172 </FONT><A NAME="172"></A>        
+<FONT ID="LN">173 </FONT><A NAME="173"></A>        Config.log(<FONT ID="StringLiteral">"-&gt; bef turn create playerTypeOrder:"</FONT>+playerTypeOrder);
+<FONT ID="LN">174 </FONT><A NAME="174"></A>        Config.log(<FONT ID="StringLiteral">"-&gt; bef turn create startingPlayer:"</FONT>+startingPlayer);
+<FONT ID="LN">175 </FONT><A NAME="175"></A>        <FONT ID="If">if</FONT>(startingPlayer!=<FONT ID="Null">null</FONT>) turn = <FONT ID="New">new</FONT> <A HREF="../../../../com/luke/clones/model/type/Turn.java.html">Turn</A>(playerTypeOrder, startingPlayer);
+<FONT ID="LN">176 </FONT><A NAME="176"></A>
+<FONT ID="LN">177 </FONT><A NAME="177"></A>        <FONT ID="If">if</FONT>(restart==<FONT ID="False">false</FONT>){
+<FONT ID="LN">178 </FONT><A NAME="178"></A><FONT ID="SingleLineComment">//          mainStage = new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
+<FONT ID="LN">179 </FONT><A NAME="179"></A></FONT><FONT ID="SingleLineComment">//          layerStage = new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
+<FONT ID="LN">180 </FONT><A NAME="180"></A></FONT>            
+<FONT ID="LN">181 </FONT><A NAME="181"></A>            mainViewport = <FONT ID="New">new</FONT> FitViewport(Config.width, Config.height);
+<FONT ID="LN">182 </FONT><A NAME="182"></A>            mainStage = <FONT ID="New">new</FONT> Stage();
+<FONT ID="LN">183 </FONT><A NAME="183"></A>            mainStage.setViewport(mainViewport);
+<FONT ID="LN">184 </FONT><A NAME="184"></A>            
+<FONT ID="LN">185 </FONT><A NAME="185"></A>            layerViewport = <FONT ID="New">new</FONT> FitViewport(Config.width, Config.height);
+<FONT ID="LN">186 </FONT><A NAME="186"></A>            layerStage = <FONT ID="New">new</FONT> Stage();
+<FONT ID="LN">187 </FONT><A NAME="187"></A>            layerStage.setViewport(layerViewport);
+<FONT ID="LN">188 </FONT><A NAME="188"></A>            
+<FONT ID="LN">189 </FONT><A NAME="189"></A>            messageViewport = <FONT ID="New">new</FONT> FitViewport(Config.width, Config.height);
+<FONT ID="LN">190 </FONT><A NAME="190"></A>            messageStage = <FONT ID="New">new</FONT> Stage();
+<FONT ID="LN">191 </FONT><A NAME="191"></A>            messageStage.setViewport(messageViewport);
+<FONT ID="LN">192 </FONT><A NAME="192"></A>            
+<FONT ID="LN">193 </FONT><A NAME="193"></A>            <FONT ID="If">if</FONT>(mainViewport!=<FONT ID="Null">null</FONT>) mainViewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), <FONT ID="True">true</FONT>);
+<FONT ID="LN">194 </FONT><A NAME="194"></A>            <FONT ID="If">if</FONT>(layerViewport!=<FONT ID="Null">null</FONT>) layerViewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), <FONT ID="True">true</FONT>);
+<FONT ID="LN">195 </FONT><A NAME="195"></A>            <FONT ID="If">if</FONT>(messageViewport!=<FONT ID="Null">null</FONT>) messageViewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), <FONT ID="True">true</FONT>);
+<FONT ID="LN">196 </FONT><A NAME="196"></A>        }
+<FONT ID="LN">197 </FONT><A NAME="197"></A>        
+<FONT ID="LN">198 </FONT><A NAME="198"></A>        specialKeyHandler = <FONT ID="New">new</FONT> <A HREF="../../../../com/luke/clones/model/SpecialKeyHandler.java.html">SpecialKeyHandler</A>() {
+<FONT ID="LN">199 </FONT><A NAME="199"></A>            @Override
+<FONT ID="LN">200 </FONT><A NAME="200"></A>            <FONT ID="Public">public</FONT> <FONT ID="Void">void</FONT> backKeyAction() {
+<FONT ID="LN">201 </FONT><A NAME="201"></A><FONT ID="SingleLineComment">//              mainStage.addActor(optionsDialog);
+<FONT ID="LN">202 </FONT><A NAME="202"></A></FONT>                messageStage.addActor(optionsDialog);
+<FONT ID="LN">203 </FONT><A NAME="203"></A>            }
+<FONT ID="LN">204 </FONT><A NAME="204"></A>        };
+<FONT ID="LN">205 </FONT><A NAME="205"></A>        inputMultiplexer = <FONT ID="New">new</FONT> InputMultiplexer(messageStage, mainStage, specialKeyHandler);
+<FONT ID="LN">206 </FONT><A NAME="206"></A>        
+<FONT ID="LN">207 </FONT><A NAME="207"></A>        Gdx.input.setInputProcessor(inputMultiplexer);
+<FONT ID="LN">208 </FONT><A NAME="208"></A>        
+<FONT ID="LN">209 </FONT><A NAME="209"></A>        fieldListener = <FONT ID="New">new</FONT> FieldListener();
+<FONT ID="LN">210 </FONT><A NAME="210"></A>        
+<FONT ID="LN">211 </FONT><A NAME="211"></A>        <FONT ID="Int">int</FONT> xFieldSize = screenWidth/boardHeight;
+<FONT ID="LN">212 </FONT><A NAME="212"></A>        <FONT ID="Int">int</FONT> yFieldSize = screenHeight/boardWidth;
+<FONT ID="LN">213 </FONT><A NAME="213"></A>        
+<FONT ID="LN">214 </FONT><A NAME="214"></A>        <FONT ID="If">if</FONT>(xFieldSize &lt; yFieldSize) fieldSize = xFieldSize;
+<FONT ID="LN">215 </FONT><A NAME="215"></A>        <FONT ID="Else">else</FONT> fieldSize = yFieldSize;
+<FONT ID="LN">216 </FONT><A NAME="216"></A>        unusedSpace = (<FONT ID="Int">int</FONT>)mainStage.getWidth() - (fieldSize * boardHeight);
+<FONT ID="LN">217 </FONT><A NAME="217"></A>        
+<FONT ID="LN">218 </FONT><A NAME="218"></A>        socialDialog = <FONT ID="New">new</FONT> <A HREF="../../../../com/luke/clones/model/button/CustomDialog.java.html">CustomDialog</A>(smallSkin);
+<FONT ID="LN">219 </FONT><A NAME="219"></A>        optionsDialog = <FONT ID="New">new</FONT> <A HREF="../../../../com/luke/clones/model/button/CustomDialog.java.html">CustomDialog</A>(smallSkin);
+<FONT ID="LN">220 </FONT><A NAME="220"></A>        
+<FONT ID="LN">221 </FONT><A NAME="221"></A>        TextButton closeSocialDialogButton = <FONT ID="New">new</FONT> TextButton(<FONT ID="StringLiteral">"Close"</FONT>, skin);
+<FONT ID="LN">222 </FONT><A NAME="222"></A>        closeSocialDialogButton.addListener(<FONT ID="New">new</FONT> ClickListener(){
+<FONT ID="LN">223 </FONT><A NAME="223"></A>            @Override
+<FONT ID="LN">224 </FONT><A NAME="224"></A>            <FONT ID="Public">public</FONT> <FONT ID="Void">void</FONT> clicked(InputEvent event, <FONT ID="Float">float</FONT> x, <FONT ID="Float">float</FONT> y) {
+<FONT ID="LN">225 </FONT><A NAME="225"></A>                SoundManager.INSTANCE.play(SoundType.CLICK);
+<FONT ID="LN">226 </FONT><A NAME="226"></A>                socialDialog.remove();
+<FONT ID="LN">227 </FONT><A NAME="227"></A>            }
+<FONT ID="LN">228 </FONT><A NAME="228"></A>        });
+<FONT ID="LN">229 </FONT><A NAME="229"></A>        
+<FONT ID="LN">230 </FONT><A NAME="230"></A>        String[] playerNameList = roomInfo.getPlayerNames();
+<FONT ID="LN">231 </FONT><A NAME="231"></A>        Label[] playerLabelList = <FONT ID="New">new</FONT> Label[playerNameList.length];
+<FONT ID="LN">232 </FONT><A NAME="232"></A>
+<FONT ID="LN">233 </FONT><A NAME="233"></A>        <FONT ID="For">for</FONT> (<FONT ID="Int">int</FONT> i=<FONT ID="IntegerLiteral">0</FONT>; i&lt;playerLabelList.length;i++){
+<FONT ID="LN">234 </FONT><A NAME="234"></A>            String tempName = playerNameList[i];
+<FONT ID="LN">235 </FONT><A NAME="235"></A>            <FONT ID="SingleLineComment">//TODO arrayIndexOutOfBounds possible
+<FONT ID="LN">236 </FONT><A NAME="236"></A></FONT>            tempName += <FONT ID="StringLiteral">" - "</FONT>+playerTypeOrder[i];
+<FONT ID="LN">237 </FONT><A NAME="237"></A>            <FONT ID="If">if</FONT>(playerNameList[i].equals(playerName)) tempName+= <FONT ID="StringLiteral">" (You)"</FONT>;
+<FONT ID="LN">238 </FONT><A NAME="238"></A>            playerLabelList[i] = <FONT ID="New">new</FONT> Label(tempName, skin);
+<FONT ID="LN">239 </FONT><A NAME="239"></A>        }
+<FONT ID="LN">240 </FONT><A NAME="240"></A>        
+<FONT ID="LN">241 </FONT><A NAME="241"></A>        <FONT ID="For">for</FONT>(Label tempLabel : playerLabelList){
+<FONT ID="LN">242 </FONT><A NAME="242"></A>            socialDialog.add(tempLabel);
+<FONT ID="LN">243 </FONT><A NAME="243"></A>            socialDialog.row();
+<FONT ID="LN">244 </FONT><A NAME="244"></A>        }
+<FONT ID="LN">245 </FONT><A NAME="245"></A>        
+<FONT ID="LN">246 </FONT><A NAME="246"></A>        socialDialog.add(closeSocialDialogButton).minSize(Config.width*<FONT ID="IntegerLiteral">1</FONT>/<FONT ID="IntegerLiteral">4</FONT>-<FONT ID="IntegerLiteral">6</FONT>,<FONT ID="IntegerLiteral">40</FONT>).spaceTop(<FONT ID="IntegerLiteral">8</FONT>).spaceBottom(<FONT ID="IntegerLiteral">8</FONT>);
+<FONT ID="LN">247 </FONT><A NAME="247"></A>        socialDialog.row();
+<FONT ID="LN">248 </FONT><A NAME="248"></A>        
+<FONT ID="LN">249 </FONT><A NAME="249"></A>        <FONT ID="If">if</FONT>(playerName.equals(roomInfo.getAdminName())){
+<FONT ID="LN">250 </FONT><A NAME="250"></A>            TextButton stopGameButton = <FONT ID="New">new</FONT> TextButton(<FONT ID="StringLiteral">"Stop game"</FONT>, skin);
+<FONT ID="LN">251 </FONT><A NAME="251"></A>            stopGameButton.addListener(<FONT ID="New">new</FONT> ClickListener(){
+<FONT ID="LN">252 </FONT><A NAME="252"></A>                @Override
+<FONT ID="LN">253 </FONT><A NAME="253"></A>                <FONT ID="Public">public</FONT> <FONT ID="Void">void</FONT> clicked(InputEvent event, <FONT ID="Float">float</FONT> x, <FONT ID="Float">float</FONT> y) {
+<FONT ID="LN">254 </FONT><A NAME="254"></A>                    SoundManager.INSTANCE.play(SoundType.CLICK);
+<FONT ID="LN">255 </FONT><A NAME="255"></A>                    clonesClient.send(<FONT ID="New">new</FONT> <A HREF="../../../../com/luke/clones/network/communication/ActionTypeMoveRoom.java.html">MoveRoom</A>(ActionTypeMoveRoom.STOP_GAME, <FONT ID="Null">null</FONT>, <FONT ID="Null">null</FONT>));
+<FONT ID="LN">256 </FONT><A NAME="256"></A>                }
+<FONT ID="LN">257 </FONT><A NAME="257"></A>            });
+<FONT ID="LN">258 </FONT><A NAME="258"></A>            optionsDialog.add(stopGameButton).minSize(Config.width*<FONT ID="IntegerLiteral">1</FONT>/<FONT ID="IntegerLiteral">3</FONT>-<FONT ID="IntegerLiteral">6</FONT>,<FONT ID="IntegerLiteral">35</FONT>).spaceTop(<FONT ID="IntegerLiteral">8</FONT>).spaceBottom(<FONT ID="IntegerLiteral">8</FONT>);
+<FONT ID="LN">259 </FONT><A NAME="259"></A>            optionsDialog.row();
+<FONT ID="LN">260 </FONT><A NAME="260"></A>        }
+<FONT ID="LN">261 </FONT><A NAME="261"></A>        TextButton leaveRoomButton = <FONT ID="New">new</FONT> TextButton(<FONT ID="StringLiteral">"Leave room"</FONT>, skin);
+<FONT ID="LN">262 </FONT><A NAME="262"></A>        leaveRoomButton.addListener(<FONT ID="New">new</FONT> ClickListener(){
+<FONT ID="LN">263 </FONT><A NAME="263"></A>            @Override
+<FONT ID="LN">264 </FONT><A NAME="264"></A>            <FONT ID="Public">public</FONT> <FONT ID="Void">void</FONT> clicked(InputEvent event, <FONT ID="Float">float</FONT> x, <FONT ID="Float">float</FONT> y) {
+<FONT ID="LN">265 </FONT><A NAME="265"></A>                SoundManager.INSTANCE.play(SoundType.CLICK);
+<FONT ID="LN">266 </FONT><A NAME="266"></A>                clonesClient.send(<FONT ID="New">new</FONT> <A HREF="../../../../com/luke/clones/network/communication/ActionTypeMoveRoom.java.html">MoveRoom</A>(ActionTypeMoveRoom.LEAVE, <FONT ID="Null">null</FONT>, <FONT ID="Null">null</FONT>));
+<FONT ID="LN">267 </FONT><A NAME="267"></A>            }
+<FONT ID="LN">268 </FONT><A NAME="268"></A>        });
+<FONT ID="LN">269 </FONT><A NAME="269"></A>        optionsDialog.add(leaveRoomButton).minSize(Config.width*<FONT ID="IntegerLiteral">1</FONT>/<FONT ID="IntegerLiteral">3</FONT>-<FONT ID="IntegerLiteral">6</FONT>,<FONT ID="IntegerLiteral">35</FONT>).spaceTop(<FONT ID="IntegerLiteral">8</FONT>).spaceBottom(<FONT ID="IntegerLiteral">8</FONT>);
+<FONT ID="LN">270 </FONT><A NAME="270"></A>        optionsDialog.row();
+<FONT ID="LN">271 </FONT><A NAME="271"></A>        TextButton closeOptionsDialogButton = <FONT ID="New">new</FONT> TextButton(<FONT ID="StringLiteral">"Cancel"</FONT>, skin);
+<FONT ID="LN">272 </FONT><A NAME="272"></A>        closeOptionsDialogButton.addListener(<FONT ID="New">new</FONT> ClickListener(){
+<FONT ID="LN">273 </FONT><A NAME="273"></A>            @Override
+<FONT ID="LN">274 </FONT><A NAME="274"></A>            <FONT ID="Public">public</FONT> <FONT ID="Void">void</FONT> clicked(InputEvent event, <FONT ID="Float">float</FONT> x, <FONT ID="Float">float</FONT> y) {
+<FONT ID="LN">275 </FONT><A NAME="275"></A>                SoundManager.INSTANCE.play(SoundType.CLICK);
+<FONT ID="LN">276 </FONT><A NAME="276"></A>                optionsDialog.remove();
+<FONT ID="LN">277 </FONT><A NAME="277"></A>            }
+<FONT ID="LN">278 </FONT><A NAME="278"></A>        });
+<FONT ID="LN">279 </FONT><A NAME="279"></A>        optionsDialog.add(closeOptionsDialogButton).minSize(Config.width*<FONT ID="IntegerLiteral">1</FONT>/<FONT ID="IntegerLiteral">3</FONT>-<FONT ID="IntegerLiteral">6</FONT>,<FONT ID="IntegerLiteral">35</FONT>).spaceTop(<FONT ID="IntegerLiteral">8</FONT>).spaceBottom(<FONT ID="IntegerLiteral">8</FONT>);
+<FONT ID="LN">280 </FONT><A NAME="280"></A>        optionsDialog.row();
+<FONT ID="LN">281 </FONT><A NAME="281"></A>        
+<FONT ID="LN">282 </FONT><A NAME="282"></A>        statusBar = <FONT ID="New">new</FONT> <A HREF="../../../../com/luke/clones/model/button/StatusBarOnline.java.html">StatusBarOnline</A>(mainStage, turn, board, skin, smallSkin, playerColor);
+<FONT ID="LN">283 </FONT><A NAME="283"></A>        statusBar.setPosition(<FONT ID="IntegerLiteral">0</FONT>, (<FONT ID="Int">int</FONT>)mainStage.getHeight()-Config.gameHeightOffset);
+<FONT ID="LN">284 </FONT><A NAME="284"></A>        statusBar.setSize((<FONT ID="Int">int</FONT>)mainStage.getWidth(), Config.gameHeightOffset/<FONT ID="IntegerLiteral">2</FONT>);
+<FONT ID="LN">285 </FONT><A NAME="285"></A>        
+<FONT ID="LN">286 </FONT><A NAME="286"></A>        Texture[] up = <FONT ID="New">new</FONT> Texture[<FONT ID="IntegerLiteral">3</FONT>];
+<FONT ID="LN">287 </FONT><A NAME="287"></A>        Texture[] down = <FONT ID="New">new</FONT> Texture[<FONT ID="IntegerLiteral">3</FONT>];
+<FONT ID="LN">288 </FONT><A NAME="288"></A>
+<FONT ID="LN">289 </FONT><A NAME="289"></A>        up[<FONT ID="IntegerLiteral">0</FONT>] = <FONT ID="New">new</FONT> Texture(Gdx.files.internal(<FONT ID="StringLiteral">"data/buttons/turn.png"</FONT>));
+<FONT ID="LN">290 </FONT><A NAME="290"></A>        up[<FONT ID="IntegerLiteral">0</FONT>].setFilter(TextureFilter.Linear, TextureFilter.Linear);
+<FONT ID="LN">291 </FONT><A NAME="291"></A>        down[<FONT ID="IntegerLiteral">0</FONT>] = <FONT ID="New">new</FONT> Texture(Gdx.files.internal(<FONT ID="StringLiteral">"data/buttons/turnc.png"</FONT>));
+<FONT ID="LN">292 </FONT><A NAME="292"></A>        down[<FONT ID="IntegerLiteral">0</FONT>].setFilter(TextureFilter.Linear, TextureFilter.Linear);
+<FONT ID="LN">293 </FONT><A NAME="293"></A>        up[<FONT ID="IntegerLiteral">1</FONT>] = <FONT ID="New">new</FONT> Texture(Gdx.files.internal(<FONT ID="StringLiteral">"data/buttons/social.png"</FONT>));
+<FONT ID="LN">294 </FONT><A NAME="294"></A>        up[<FONT ID="IntegerLiteral">1</FONT>].setFilter(TextureFilter.Linear, TextureFilter.Linear);
+<FONT ID="LN">295 </FONT><A NAME="295"></A>        down[<FONT ID="IntegerLiteral">1</FONT>] = <FONT ID="New">new</FONT> Texture(Gdx.files.internal(<FONT ID="StringLiteral">"data/buttons/socialc.png"</FONT>));
+<FONT ID="LN">296 </FONT><A NAME="296"></A>        down[<FONT ID="IntegerLiteral">1</FONT>].setFilter(TextureFilter.Linear, TextureFilter.Linear);
+<FONT ID="LN">297 </FONT><A NAME="297"></A>        up[<FONT ID="IntegerLiteral">2</FONT>] = <FONT ID="New">new</FONT> Texture(Gdx.files.internal(<FONT ID="StringLiteral">"data/buttons/options.png"</FONT>));
+<FONT ID="LN">298 </FONT><A NAME="298"></A>        up[<FONT ID="IntegerLiteral">2</FONT>].setFilter(TextureFilter.Linear, TextureFilter.Linear);
+<FONT ID="LN">299 </FONT><A NAME="299"></A>        down[<FONT ID="IntegerLiteral">2</FONT>] = <FONT ID="New">new</FONT> Texture(Gdx.files.internal(<FONT ID="StringLiteral">"data/buttons/optionsc.png"</FONT>));
+<FONT ID="LN">300 </FONT><A NAME="300"></A>        down[<FONT ID="IntegerLiteral">2</FONT>].setFilter(TextureFilter.Linear, TextureFilter.Linear);
+<FONT ID="LN">301 </FONT><A NAME="301"></A>        
+<FONT ID="LN">302 </FONT><A NAME="302"></A>        <A HREF="../../../../com/luke/clones/model/button/ButtonBar.java.html">ButtonBar</A> buttonBar = <FONT ID="New">new</FONT> <A HREF="../../../../com/luke/clones/model/button/ButtonBar.java.html">ButtonBar</A>(mainStage, up, down){
+<FONT ID="LN">303 </FONT><A NAME="303"></A>            @Override
+<FONT ID="LN">304 </FONT><A NAME="304"></A>            <FONT ID="Public">public</FONT> <FONT ID="Void">void</FONT> click(InputEvent event, <FONT ID="Float">float</FONT> x, <FONT ID="Float">float</FONT> y) {
+<FONT ID="LN">305 </FONT><A NAME="305"></A>                <A HREF="../../../../com/luke/clones/model/button/ImgButton.java.html">ImgButton</A> clicked = (<A HREF="../../../../com/luke/clones/model/button/ImgButton.java.html">ImgButton</A>) event.getListenerActor();
+<FONT ID="LN">306 </FONT><A NAME="306"></A>                <FONT ID="If">if</FONT>(clicked.equals(imgButton[<FONT ID="IntegerLiteral">0</FONT>])){
+<FONT ID="LN">307 </FONT><A NAME="307"></A>                    SoundManager.INSTANCE.play(SoundType.CLICK);
+<FONT ID="LN">308 </FONT><A NAME="308"></A>                    clickedPlayerPosition=<FONT ID="Null">null</FONT>;
+<FONT ID="LN">309 </FONT><A NAME="309"></A>                    layerStage.clear();
+<FONT ID="LN">310 </FONT><A NAME="310"></A>                    <A HREF="../../../../com/luke/clones/network/communication/MoveBoard.java.html">MoveBoard</A> move = <FONT ID="New">new</FONT> <A HREF="../../../../com/luke/clones/network/communication/MoveBoard.java.html">MoveBoard</A>(ActionTypeMove.SKIP_TURN,<FONT ID="Null">null</FONT>,<FONT ID="Null">null</FONT>);
+<FONT ID="LN">311 </FONT><A NAME="311"></A>                    clonesClient.send(move);
+<FONT ID="LN">312 </FONT><A NAME="312"></A>
+<FONT ID="LN">313 </FONT><A NAME="313"></A>                }
+<FONT ID="LN">314 </FONT><A NAME="314"></A>                <FONT ID="If">if</FONT>(clicked.equals(imgButton[<FONT ID="IntegerLiteral">1</FONT>])){
+<FONT ID="LN">315 </FONT><A NAME="315"></A><FONT ID="SingleLineComment">//                  mainStage.addActor(socialDialog);
+<FONT ID="LN">316 </FONT><A NAME="316"></A></FONT>                    SoundManager.INSTANCE.play(SoundType.CLICK);
+<FONT ID="LN">317 </FONT><A NAME="317"></A>                    messageStage.addActor(socialDialog);
+<FONT ID="LN">318 </FONT><A NAME="318"></A>                }
+<FONT ID="LN">319 </FONT><A NAME="319"></A>                <FONT ID="If">if</FONT>(clicked.equals(imgButton[<FONT ID="IntegerLiteral">2</FONT>])){
+<FONT ID="LN">320 </FONT><A NAME="320"></A><FONT ID="SingleLineComment">//                  mainStage.addActor(optionsDialog);
+<FONT ID="LN">321 </FONT><A NAME="321"></A></FONT>                    SoundManager.INSTANCE.play(SoundType.CLICK);
+<FONT ID="LN">322 </FONT><A NAME="322"></A>                    messageStage.addActor(optionsDialog);
+<FONT ID="LN">323 </FONT><A NAME="323"></A>                }
+<FONT ID="LN">324 </FONT><A NAME="324"></A>            }
+<FONT ID="LN">325 </FONT><A NAME="325"></A>        };
+<FONT ID="LN">326 </FONT><A NAME="326"></A>        
+<FONT ID="LN">327 </FONT><A NAME="327"></A>        buttonBar.setPosition((<FONT ID="Int">int</FONT>)mainStage.getWidth()-(<FONT ID="IntegerLiteral">48</FONT>+<FONT ID="IntegerLiteral">2</FONT>)*<FONT ID="IntegerLiteral">3</FONT>, (<FONT ID="Int">int</FONT>)mainStage.getHeight()-Math.round(Config.gameHeightOffset/<FONT ID="FloatPointLiteral">2.0f</FONT>));
+<FONT ID="LN">328 </FONT><A NAME="328"></A>        buttonBar.setButtonSize(<FONT ID="IntegerLiteral">48</FONT>, <FONT ID="IntegerLiteral">46</FONT>);
+<FONT ID="LN">329 </FONT><A NAME="329"></A>        buttonBar.setSpacing(<FONT ID="IntegerLiteral">2</FONT>,<FONT ID="IntegerLiteral">2</FONT>);
+<FONT ID="LN">330 </FONT><A NAME="330"></A>        
+<FONT ID="LN">331 </FONT><A NAME="331"></A>        fieldMap = <FONT ID="New">new</FONT> HashMap&lt;<A HREF="../../../../com/luke/clones/model/type/PlayerPosition.java.html">Position</A>,<A HREF="../../../../com/luke/clones/model/actor/FieldActor2.java.html">FieldActor2</A>&gt;();
+<FONT ID="LN">332 </FONT><A NAME="332"></A>        
+<FONT ID="LN">333 </FONT><A NAME="333"></A>        tableProgressBarCreator = <FONT ID="New">new</FONT> <A HREF="../../../../com/luke/clones/chart/TableProgressBarCreator.java.html">TableProgressBarCreator</A>();
+<FONT ID="LN">334 </FONT><A NAME="334"></A>        tableProgressBarCreator.setTextures(<FONT ID="New">new</FONT> Texture(Gdx.files.internal(<FONT ID="StringLiteral">"data/images/table_chart_bars_brown_part1.png"</FONT>)), 
+<FONT ID="LN">335 </FONT><A NAME="335"></A>                <FONT ID="New">new</FONT> Texture(Gdx.files.internal(<FONT ID="StringLiteral">"data/images/table_chart_bars_brown_part2.png"</FONT>)), 
+<FONT ID="LN">336 </FONT><A NAME="336"></A>                <FONT ID="New">new</FONT> Texture(Gdx.files.internal(<FONT ID="StringLiteral">"data/images/table_chart_bars_brown_part3.png"</FONT>)));
+<FONT ID="LN">337 </FONT><A NAME="337"></A>        tableProgressBarCreator.setPosition(<FONT ID="IntegerLiteral">0</FONT>, (<FONT ID="Int">int</FONT>)mainStage.getHeight()-Config.gameHeightOffset-Config.timeBarHeight);
+<FONT ID="LN">338 </FONT><A NAME="338"></A>        tableProgressBarCreator.setChartSize(Math.round(mainStage.getWidth()), Config.timeBarHeight);
+<FONT ID="LN">339 </FONT><A NAME="339"></A>        
+<FONT ID="LN">340 </FONT><A NAME="340"></A>        nextRoundAutoStartTimeMeasure = <FONT ID="New">new</FONT> <A HREF="../../../../com/luke/clones/model/TimeMeasure.java.html">TimeMeasure</A>();
+<FONT ID="LN">341 </FONT><A NAME="341"></A><FONT ID="SingleLineComment">//      nextRoundAutoStartTimeLabel = new Label("Next round starts in "+NEXT_ROUND_AUTO_START_TIME_IN_SECONDS+"s", smallSkin);
+<FONT ID="LN">342 </FONT><A NAME="342"></A></FONT>        nextRoundAutoStartTimeLabel = <FONT ID="New">new</FONT> Label(<FONT ID="StringLiteral">""</FONT>, smallSkin);
+<FONT ID="LN">343 </FONT><A NAME="343"></A>        
+<FONT ID="LN">344 </FONT><A NAME="344"></A>        startMeasureAndSignalizePlayerMoveTime();
+<FONT ID="LN">345 </FONT><A NAME="345"></A>        
+<FONT ID="LN">346 </FONT><A NAME="346"></A>        buildStage();
+<FONT ID="LN">347 </FONT><A NAME="347"></A>    }
+<FONT ID="LN">348 </FONT><A NAME="348"></A>    
+<FONT ID="LN">349 </FONT><A NAME="349"></A>    <FONT ID="Private">private</FONT> <FONT ID="Void">void</FONT> startMeasureAndSignalizePlayerMoveTime(){
+<FONT ID="LN">350 </FONT><A NAME="350"></A>        <FONT ID="If">if</FONT>(!isPlayerMoveTimeLimitUnlimited()){
+<FONT ID="LN">351 </FONT><A NAME="351"></A>            timeBar = tableProgressBarCreator.createWithPercentScale(<FONT ID="IntegerLiteral">100</FONT>, <FONT ID="IntegerLiteral">0</FONT>, <FONT ID="IntegerLiteral">0</FONT>);
+<FONT ID="LN">352 </FONT><A NAME="352"></A>            mainStage.addActor(timeBar);
+<FONT ID="LN">353 </FONT><A NAME="353"></A>            
+<FONT ID="LN">354 </FONT><A NAME="354"></A>            playerMoveTime = <FONT ID="New">new</FONT> <A HREF="../../../../com/luke/clones/model/TimeMeasure.java.html">TimeMeasure</A>();
+<FONT ID="LN">355 </FONT><A NAME="355"></A>            
+<FONT ID="LN">356 </FONT><A NAME="356"></A>            prepareMoveTimeActor();
+<FONT ID="LN">357 </FONT><A NAME="357"></A>            
+<FONT ID="LN">358 </FONT><A NAME="358"></A>            mainStage.addActor(playerMoveTimeActor);
+<FONT ID="LN">359 </FONT><A NAME="359"></A>        }
+<FONT ID="LN">360 </FONT><A NAME="360"></A>    }
+<FONT ID="LN">361 </FONT><A NAME="361"></A>    
+<FONT ID="LN">362 </FONT><A NAME="362"></A>    <FONT ID="Private">private</FONT> <FONT ID="Void">void</FONT> prepareMoveTimeActor(){
+<FONT ID="LN">363 </FONT><A NAME="363"></A>        playerMoveTimeActor = <FONT ID="New">new</FONT> Actor(){
+<FONT ID="LN">364 </FONT><A NAME="364"></A><FONT ID="SingleLineComment">//          @Override
+<FONT ID="LN">365 </FONT><A NAME="365"></A></FONT><FONT ID="SingleLineComment">//          public void draw(SpriteBatch batch, float parentAlpha) {
+<FONT ID="LN">366 </FONT><A NAME="366"></A></FONT><FONT ID="SingleLineComment">//              float playerMoveTimeNumber = playerMoveTime.getMeasuredTimeInMs()/1000f;
+<FONT ID="LN">367 </FONT><A NAME="367"></A></FONT><FONT ID="SingleLineComment">//              float playerMoveTimeRatio = playerMoveTimeNumber/roomInfo.getPlayerMoveTimeLimit().getLimitInSeconds();
+<FONT ID="LN">368 </FONT><A NAME="368"></A></FONT><FONT ID="SingleLineComment">//              int playerMoveTimePercent = Math.round(playerMoveTimeRatio*1000);
+<FONT ID="LN">369 </FONT><A NAME="369"></A></FONT><FONT ID="SingleLineComment">//              timeBar = tableProgressBarCreator.createWithPerMilScale(1000-playerMoveTimePercent, playerMoveTimePercent, 0);
+<FONT ID="LN">370 </FONT><A NAME="370"></A></FONT><FONT ID="SingleLineComment">//          }
+<FONT ID="LN">371 </FONT><A NAME="371"></A></FONT>            @Override
+<FONT ID="LN">372 </FONT><A NAME="372"></A>            <FONT ID="Public">public</FONT> <FONT ID="Void">void</FONT> draw(Batch batch, <FONT ID="Float">float</FONT> parentAlpha) {
+<FONT ID="LN">373 </FONT><A NAME="373"></A>                <FONT ID="Float">float</FONT> playerMoveTimeNumber = playerMoveTime.getMeasuredTimeInMs()/<FONT ID="FloatPointLiteral">1000f</FONT>;
+<FONT ID="LN">374 </FONT><A NAME="374"></A>                <FONT ID="Float">float</FONT> playerMoveTimeRatio = playerMoveTimeNumber/roomInfo.getPlayerMoveTimeLimit().getLimitInSeconds();
+<FONT ID="LN">375 </FONT><A NAME="375"></A>                <FONT ID="Int">int</FONT> playerMoveTimePercent = Math.round(playerMoveTimeRatio*<FONT ID="IntegerLiteral">1000</FONT>);
+<FONT ID="LN">376 </FONT><A NAME="376"></A>                timeBar = tableProgressBarCreator.createWithPerMilScale(<FONT ID="IntegerLiteral">1000</FONT>-playerMoveTimePercent, playerMoveTimePercent, <FONT ID="IntegerLiteral">0</FONT>);
+<FONT ID="LN">377 </FONT><A NAME="377"></A>            }
+<FONT ID="LN">378 </FONT><A NAME="378"></A>        };
+<FONT ID="LN">379 </FONT><A NAME="379"></A>    }
+<FONT ID="LN">380 </FONT><A NAME="380"></A>    
+<FONT ID="LN">381 </FONT><A NAME="381"></A>    <FONT ID="Private">private</FONT> <FONT ID="Void">void</FONT> stopMeasureAndSignalizePlayerMoveTime(){
+<FONT ID="LN">382 </FONT><A NAME="382"></A>        <FONT ID="If">if</FONT>(!isPlayerMoveTimeLimitUnlimited()){
+<FONT ID="LN">383 </FONT><A NAME="383"></A>            playerMoveTimeActor.remove();
+<FONT ID="LN">384 </FONT><A NAME="384"></A>        }
+<FONT ID="LN">385 </FONT><A NAME="385"></A>    }
+<FONT ID="LN">386 </FONT><A NAME="386"></A>    
+<FONT ID="LN">387 </FONT><A NAME="387"></A>    <FONT ID="Private">private</FONT> <FONT ID="Boolean">boolean</FONT> isPlayerMoveTimeLimitUnlimited(){
+<FONT ID="LN">388 </FONT><A NAME="388"></A>        <FONT ID="Return">return</FONT> roomInfo.getPlayerMoveTimeLimit().isUnlimited();
+<FONT ID="LN">389 </FONT><A NAME="389"></A>    }
+<FONT ID="LN">390 </FONT><A NAME="390"></A>
+<FONT ID="LN">391 </FONT><A NAME="391"></A>    <FONT ID="Private">private</FONT> <FONT ID="Synchronized">synchronized</FONT> <FONT ID="Void">void</FONT> buildStage(){
+<FONT ID="LN">392 </FONT><A NAME="392"></A>        emptyTexture = <FONT ID="New">new</FONT> Texture(Gdx.files.internal(<FONT ID="StringLiteral">"data/models/blank.png"</FONT>));
+<FONT ID="LN">393 </FONT><A NAME="393"></A>        solidTexture = <FONT ID="New">new</FONT> Texture(Gdx.files.internal(<FONT ID="StringLiteral">"data/models/solid.png"</FONT>));
+<FONT ID="LN">394 </FONT><A NAME="394"></A>        ballTexture = <FONT ID="New">new</FONT> Texture(Gdx.files.internal(<FONT ID="StringLiteral">"data/models/ball.png"</FONT>));
+<FONT ID="LN">395 </FONT><A NAME="395"></A>        selectTexture = <FONT ID="New">new</FONT> Texture(Gdx.files.internal(<FONT ID="StringLiteral">"data/models/select2.png"</FONT>));
+<FONT ID="LN">396 </FONT><A NAME="396"></A>        markBallTexture = <FONT ID="New">new</FONT> Texture(Gdx.files.internal(<FONT ID="StringLiteral">"data/models/select_ball.png"</FONT>));
+<FONT ID="LN">397 </FONT><A NAME="397"></A>        
+<FONT ID="LN">398 </FONT><A NAME="398"></A>        <FONT ID="For">for</FONT>(<FONT ID="Int">int</FONT> i=<FONT ID="IntegerLiteral">0</FONT>; i&lt;board.getWidth();i++){
+<FONT ID="LN">399 </FONT><A NAME="399"></A>            <FONT ID="For">for</FONT>(<FONT ID="Int">int</FONT> j=<FONT ID="IntegerLiteral">0</FONT>; j&lt;board.getHeight();j++){
+<FONT ID="LN">400 </FONT><A NAME="400"></A>                <A HREF="../../../../com/luke/clones/model/type/FieldType.java.html">FieldType</A> fieldType = board.getFieldType(i, j);
+<FONT ID="LN">401 </FONT><A NAME="401"></A>                <FONT ID="If">if</FONT>(fieldType == FieldType.EMPTY){
+<FONT ID="LN">402 </FONT><A NAME="402"></A>                    <A HREF="../../../../com/luke/clones/model/actor/FieldActor2.java.html">FieldActor2</A> emptyField = <FONT ID="New">new</FONT> <A HREF="../../../../com/luke/clones/model/actor/FieldActor2.java.html">FieldActor2</A>(emptyTexture, solidTexture, ballTexture, emptyTexture, <FONT ID="Null">null</FONT>, <FONT ID="New">new</FONT> <A HREF="../../../../com/luke/clones/model/type/PlayerPosition.java.html">Position</A>(i,j),fieldType);
+<FONT ID="LN">403 </FONT><A NAME="403"></A>                    emptyField.setPosition((j*fieldSize)+unusedSpace/<FONT ID="IntegerLiteral">2</FONT>, i*fieldSize);
+<FONT ID="LN">404 </FONT><A NAME="404"></A>                    emptyField.setSize(fieldSize, fieldSize);
+<FONT ID="LN">405 </FONT><A NAME="405"></A>                    emptyField.addListener(fieldListener);
+<FONT ID="LN">406 </FONT><A NAME="406"></A>                    mainStage.addActor(emptyField);
+<FONT ID="LN">407 </FONT><A NAME="407"></A>                    fieldMap.put(emptyField.getPosition(), emptyField);
+<FONT ID="LN">408 </FONT><A NAME="408"></A>                    
+<FONT ID="LN">409 </FONT><A NAME="409"></A>                }
+<FONT ID="LN">410 </FONT><A NAME="410"></A>                <FONT ID="Else">else</FONT> <FONT ID="If">if</FONT>(fieldType == FieldType.SOLID){
+<FONT ID="LN">411 </FONT><A NAME="411"></A>                    <A HREF="../../../../com/luke/clones/model/actor/FieldActor2.java.html">FieldActor2</A> solidField = <FONT ID="New">new</FONT> <A HREF="../../../../com/luke/clones/model/actor/FieldActor2.java.html">FieldActor2</A>(emptyTexture, solidTexture, ballTexture, emptyTexture, <FONT ID="Null">null</FONT>, <FONT ID="New">new</FONT> <A HREF="../../../../com/luke/clones/model/type/PlayerPosition.java.html">Position</A>(i,j),fieldType);
+<FONT ID="LN">412 </FONT><A NAME="412"></A>                    solidField.setPosition((j*fieldSize)+unusedSpace/<FONT ID="IntegerLiteral">2</FONT>, i*fieldSize);
+<FONT ID="LN">413 </FONT><A NAME="413"></A>                    solidField.setSize(fieldSize, fieldSize);
+<FONT ID="LN">414 </FONT><A NAME="414"></A>                    solidField.addListener(fieldListener);
+<FONT ID="LN">415 </FONT><A NAME="415"></A>                    mainStage.addActor(solidField);
+<FONT ID="LN">416 </FONT><A NAME="416"></A>                    fieldMap.put(solidField.getPosition(), solidField);
+<FONT ID="LN">417 </FONT><A NAME="417"></A>                }
+<FONT ID="LN">418 </FONT><A NAME="418"></A>                <FONT ID="Else">else</FONT> <FONT ID="If">if</FONT>(fieldType == FieldType.TAKEN){
+<FONT ID="LN">419 </FONT><A NAME="419"></A>                    <A HREF="../../../../com/luke/clones/model/type/PlayerType.java.html">PlayerType</A> playerType;
+<FONT ID="LN">420 </FONT><A NAME="420"></A>                    playerType = board.getFieldPlayer(i, j);
+<FONT ID="LN">421 </FONT><A NAME="421"></A>                    Color color;
+<FONT ID="LN">422 </FONT><A NAME="422"></A>                    <FONT ID="If">if</FONT>(playerType == PlayerType.BLUE) color = Color.BLUE;
+<FONT ID="LN">423 </FONT><A NAME="423"></A>                    <FONT ID="Else">else</FONT> <FONT ID="If">if</FONT>(playerType == PlayerType.GREEN) color = Color.GREEN;
+<FONT ID="LN">424 </FONT><A NAME="424"></A>                    <FONT ID="Else">else</FONT> <FONT ID="If">if</FONT>(playerType == PlayerType.RED) color = Color.RED;
+<FONT ID="LN">425 </FONT><A NAME="425"></A>                    <FONT ID="Else">else</FONT> <FONT ID="If">if</FONT>(playerType == PlayerType.ORANGE) color = Color.ORANGE;
+<FONT ID="LN">426 </FONT><A NAME="426"></A>                    <FONT ID="Else">else</FONT> color = Color.WHITE;
+<FONT ID="LN">427 </FONT><A NAME="427"></A>                    <A HREF="../../../../com/luke/clones/model/actor/FieldActor2.java.html">FieldActor2</A> ballField = <FONT ID="New">new</FONT> <A HREF="../../../../com/luke/clones/model/actor/FieldActor2.java.html">FieldActor2</A>(emptyTexture, solidTexture, ballTexture, emptyTexture, color, <FONT ID="New">new</FONT> <A HREF="../../../../com/luke/clones/model/type/PlayerPosition.java.html">Position</A>(i,j),fieldType);
+<FONT ID="LN">428 </FONT><A NAME="428"></A>                    ballField.setPosition((j*fieldSize)+unusedSpace/<FONT ID="IntegerLiteral">2</FONT>, i*fieldSize);
+<FONT ID="LN">429 </FONT><A NAME="429"></A>                    ballField.setSize(fieldSize, fieldSize);
+<FONT ID="LN">430 </FONT><A NAME="430"></A>                    ballField.addListener(fieldListener);
+<FONT ID="LN">431 </FONT><A NAME="431"></A>                    mainStage.addActor(ballField);
+<FONT ID="LN">432 </FONT><A NAME="432"></A>                    fieldMap.put(ballField.getPosition(), ballField);
+<FONT ID="LN">433 </FONT><A NAME="433"></A>                }
+<FONT ID="LN">434 </FONT><A NAME="434"></A>            }
+<FONT ID="LN">435 </FONT><A NAME="435"></A>        }
+<FONT ID="LN">436 </FONT><A NAME="436"></A>        
+<FONT ID="LN">437 </FONT><A NAME="437"></A>        flashCurrentPlayerBalls();
+<FONT ID="LN">438 </FONT><A NAME="438"></A>        
+<FONT ID="LN">439 </FONT><A NAME="439"></A>        startCountingPlayerMoveTime();
+<FONT ID="LN">440 </FONT><A NAME="440"></A>        
+<FONT ID="LN">441 </FONT><A NAME="441"></A>        <FONT ID="If">if</FONT>(Config.debug) System.out.println(<FONT ID="StringLiteral">" Red: "</FONT>+board.getBallCount(PlayerType.RED)+<FONT ID="StringLiteral">" Blue: "</FONT>+board.getBallCount(PlayerType.BLUE)+<FONT ID="StringLiteral">" Green: "</FONT>+board.getBallCount(PlayerType.GREEN)+<FONT ID="StringLiteral">" Orange: "</FONT>+board.getBallCount(PlayerType.ORANGE));
+<FONT ID="LN">442 </FONT><A NAME="442"></A>    }
+<FONT ID="LN">443 </FONT><A NAME="443"></A>    
+<FONT ID="LN">444 </FONT><A NAME="444"></A>    <FONT ID="Private">private</FONT> <FONT ID="Void">void</FONT> startCountingPlayerMoveTime(){
+<FONT ID="LN">445 </FONT><A NAME="445"></A>        <FONT ID="If">if</FONT>(!isPlayerMoveTimeLimitUnlimited()){
+<FONT ID="LN">446 </FONT><A NAME="446"></A>            playerMoveTime.start();
+<FONT ID="LN">447 </FONT><A NAME="447"></A>        }
+<FONT ID="LN">448 </FONT><A NAME="448"></A>    }
+<FONT ID="LN">449 </FONT><A NAME="449"></A>    
+<FONT ID="LN">450 </FONT><A NAME="450"></A>    <FONT ID="Private">private</FONT> <FONT ID="Void">void</FONT> updateStage(){     
+<FONT ID="LN">451 </FONT><A NAME="451"></A>        statusBar.reflesh();
+<FONT ID="LN">452 </FONT><A NAME="452"></A>        <FONT ID="For">for</FONT>(<FONT ID="Int">int</FONT> i=<FONT ID="IntegerLiteral">0</FONT>; i&lt;board.getWidth();i++){
+<FONT ID="LN">453 </FONT><A NAME="453"></A>            <FONT ID="For">for</FONT>(<FONT ID="Int">int</FONT> j=<FONT ID="IntegerLiteral">0</FONT>; j&lt;board.getHeight();j++){
+<FONT ID="LN">454 </FONT><A NAME="454"></A>                <A HREF="../../../../com/luke/clones/model/type/FieldType.java.html">FieldType</A> fieldType = board.getFieldType(i, j);
+<FONT ID="LN">455 </FONT><A NAME="455"></A>                <A HREF="../../../../com/luke/clones/model/type/PlayerPosition.java.html">Position</A> pos = <FONT ID="New">new</FONT> <A HREF="../../../../com/luke/clones/model/type/PlayerPosition.java.html">Position</A>(i,j);
+<FONT ID="LN">456 </FONT><A NAME="456"></A>                <A HREF="../../../../com/luke/clones/model/actor/FieldActor2.java.html">FieldActor2</A> field = fieldMap.get(pos);
+<FONT ID="LN">457 </FONT><A NAME="457"></A>                    <FONT ID="If">if</FONT>(fieldType == FieldType.TAKEN){
+<FONT ID="LN">458 </FONT><A NAME="458"></A>                        <A HREF="../../../../com/luke/clones/model/type/PlayerType.java.html">PlayerType</A> playerType = board.getFieldPlayer(i, j);
+<FONT ID="LN">459 </FONT><A NAME="459"></A>                        Color color;
+<FONT ID="LN">460 </FONT><A NAME="460"></A>                        <FONT ID="If">if</FONT>(playerType == PlayerType.BLUE) color = Color.BLUE;
+<FONT ID="LN">461 </FONT><A NAME="461"></A>                        <FONT ID="Else">else</FONT> <FONT ID="If">if</FONT>(playerType == PlayerType.GREEN) color = Color.GREEN;
+<FONT ID="LN">462 </FONT><A NAME="462"></A>                        <FONT ID="Else">else</FONT> <FONT ID="If">if</FONT>(playerType == PlayerType.RED) color = Color.RED;
+<FONT ID="LN">463 </FONT><A NAME="463"></A>                        <FONT ID="Else">else</FONT> <FONT ID="If">if</FONT>(playerType == PlayerType.ORANGE) color = Color.ORANGE;
+<FONT ID="LN">464 </FONT><A NAME="464"></A>                        <FONT ID="Else">else</FONT> color = Color.WHITE;
+<FONT ID="LN">465 </FONT><A NAME="465"></A>                        <FONT ID="If">if</FONT>(field.getColor() != color) field.setColor(color);
+<FONT ID="LN">466 </FONT><A NAME="466"></A>                        <FONT ID="If">if</FONT>(field.getFieldType() != fieldType) field.setFieldType(fieldType);
+<FONT ID="LN">467 </FONT><A NAME="467"></A>                    }
+<FONT ID="LN">468 </FONT><A NAME="468"></A>                    <FONT ID="Else">else</FONT>{
+<FONT ID="LN">469 </FONT><A NAME="469"></A>                        <FONT ID="If">if</FONT>(field.getFieldType() != fieldType) {
+<FONT ID="LN">470 </FONT><A NAME="470"></A>                            field.setFieldType(fieldType);
+<FONT ID="LN">471 </FONT><A NAME="471"></A>                            field.setColor(<FONT ID="Null">null</FONT>);
+<FONT ID="LN">472 </FONT><A NAME="472"></A>                        }
+<FONT ID="LN">473 </FONT><A NAME="473"></A>                    }
+<FONT ID="LN">474 </FONT><A NAME="474"></A>            }
+<FONT ID="LN">475 </FONT><A NAME="475"></A>        }
+<FONT ID="LN">476 </FONT><A NAME="476"></A>        
+<FONT ID="LN">477 </FONT><A NAME="477"></A>        flashCurrentPlayerBalls();
+<FONT ID="LN">478 </FONT><A NAME="478"></A>        
+<FONT ID="LN">479 </FONT><A NAME="479"></A>        startCountingPlayerMoveTime();
+<FONT ID="LN">480 </FONT><A NAME="480"></A>        
+<FONT ID="LN">481 </FONT><A NAME="481"></A>        <FONT ID="If">if</FONT>(Config.debug) System.out.println(<FONT ID="StringLiteral">" Red: "</FONT>+board.getBallCount(PlayerType.RED)+<FONT ID="StringLiteral">" Blue: "</FONT>+board.getBallCount(PlayerType.BLUE)+<FONT ID="StringLiteral">" Green: "</FONT>+board.getBallCount(PlayerType.GREEN)+<FONT ID="StringLiteral">" Orange: "</FONT>+board.getBallCount(PlayerType.ORANGE));
+<FONT ID="LN">482 </FONT><A NAME="482"></A>    }
+<FONT ID="LN">483 </FONT><A NAME="483"></A>    
+<FONT ID="LN">484 </FONT><A NAME="484"></A>    <FONT ID="Public">public</FONT> <FONT ID="Synchronized">synchronized</FONT> Stage getMainStage(){
+<FONT ID="LN">485 </FONT><A NAME="485"></A>        <FONT ID="Return">return</FONT> mainStage;
+<FONT ID="LN">486 </FONT><A NAME="486"></A>    }
+<FONT ID="LN">487 </FONT><A NAME="487"></A>    
+<FONT ID="LN">488 </FONT><A NAME="488"></A>    <FONT ID="Public">public</FONT> <FONT ID="Synchronized">synchronized</FONT> Stage getLayerStage(){
+<FONT ID="LN">489 </FONT><A NAME="489"></A>        <FONT ID="Return">return</FONT> layerStage;
+<FONT ID="LN">490 </FONT><A NAME="490"></A>    }
+<FONT ID="LN">491 </FONT><A NAME="491"></A>    
+<FONT ID="LN">492 </FONT><A NAME="492"></A>    <FONT ID="Public">public</FONT> Stage getMessageStage() {
+<FONT ID="LN">493 </FONT><A NAME="493"></A>        <FONT ID="Return">return</FONT> messageStage;
+<FONT ID="LN">494 </FONT><A NAME="494"></A>    }
+<FONT ID="LN">495 </FONT><A NAME="495"></A>
+<FONT ID="LN">496 </FONT><A NAME="496"></A>    <FONT ID="Private">private</FONT> <FONT ID="Class">class</FONT> FieldListener <FONT ID="Extends">extends</FONT> ClickListener{
+<FONT ID="LN">497 </FONT><A NAME="497"></A>
+<FONT ID="LN">498 </FONT><A NAME="498"></A>        @Override
+<FONT ID="LN">499 </FONT><A NAME="499"></A>        <FONT ID="Public">public</FONT> <FONT ID="Synchronized">synchronized</FONT> <FONT ID="Void">void</FONT> clicked(InputEvent event, <FONT ID="Float">float</FONT> x, <FONT ID="Float">float</FONT> y) {
+<FONT ID="LN">500 </FONT><A NAME="500"></A>            <FONT ID="Super">super</FONT>.clicked(event, x, y);
+<FONT ID="LN">501 </FONT><A NAME="501"></A>            <A HREF="../../../../com/luke/clones/model/actor/FieldActor2.java.html">FieldActor2</A> field = (<A HREF="../../../../com/luke/clones/model/actor/FieldActor2.java.html">FieldActor2</A>) event.getListenerActor();
+<FONT ID="LN">502 </FONT><A NAME="502"></A>            <A HREF="../../../../com/luke/clones/model/type/PlayerPosition.java.html">Position</A> pos = field.getPosition();
+<FONT ID="LN">503 </FONT><A NAME="503"></A>            <A HREF="../../../../com/luke/clones/model/type/PlayerType.java.html">PlayerType</A> fieldPlayer = board.getFieldPlayer(pos.getX(), pos.getY());
+<FONT ID="LN">504 </FONT><A NAME="504"></A>            <FONT ID="If">if</FONT>(board.getFieldType(pos.getX(), pos.getY()) == FieldType.TAKEN &amp;&amp; fieldPlayer == turn.getCurrentPlayer()){
+<FONT ID="LN">505 </FONT><A NAME="505"></A>                clickedPlayerPosition = <FONT ID="New">new</FONT> <A HREF="../../../../com/luke/clones/model/type/PlayerPosition.java.html">PlayerPosition</A>(pos.getX(), pos.getY(), fieldPlayer);
+<FONT ID="LN">506 </FONT><A NAME="506"></A>                
+<FONT ID="LN">507 </FONT><A NAME="507"></A>                highlightPossibleMoveFields(clickedPlayerPosition);
+<FONT ID="LN">508 </FONT><A NAME="508"></A>            }
+<FONT ID="LN">509 </FONT><A NAME="509"></A>            <FONT ID="Else">else</FONT> <FONT ID="If">if</FONT>(board.getFieldType(pos.getX(), pos.getY()) == FieldType.EMPTY){
+<FONT ID="LN">510 </FONT><A NAME="510"></A>                <FONT ID="If">if</FONT>(clickedPlayerPosition!=<FONT ID="Null">null</FONT>){
+<FONT ID="LN">511 </FONT><A NAME="511"></A>                    <FONT ID="If">if</FONT>(board.isMovePossible(clickedPlayerPosition.getX(), clickedPlayerPosition.getY(), pos.getX(), pos.getY())){
+<FONT ID="LN">512 </FONT><A NAME="512"></A>                        Config.log(<FONT ID="StringLiteral">"My player Type: "</FONT>+playerColor);
+<FONT ID="LN">513 </FONT><A NAME="513"></A>                        clonesClient.send(<FONT ID="New">new</FONT> <A HREF="../../../../com/luke/clones/network/communication/MoveBoard.java.html">MoveBoard</A>(ActionTypeMove.MOVE,clickedPlayerPosition,pos));
+<FONT ID="LN">514 </FONT><A NAME="514"></A>                        clickedPlayerPosition=<FONT ID="Null">null</FONT>;
+<FONT ID="LN">515 </FONT><A NAME="515"></A>                        
+<FONT ID="LN">516 </FONT><A NAME="516"></A>                        layerStage.clear();
+<FONT ID="LN">517 </FONT><A NAME="517"></A>                    }
+<FONT ID="LN">518 </FONT><A NAME="518"></A>                }
+<FONT ID="LN">519 </FONT><A NAME="519"></A>            }
+<FONT ID="LN">520 </FONT><A NAME="520"></A>        }
+<FONT ID="LN">521 </FONT><A NAME="521"></A>
+<FONT ID="LN">522 </FONT><A NAME="522"></A>    }
+<FONT ID="LN">523 </FONT><A NAME="523"></A>    
+<FONT ID="LN">524 </FONT><A NAME="524"></A>    <FONT ID="Private">private</FONT> <FONT ID="Void">void</FONT> highlightPossibleMoveFields(<A HREF="../../../../com/luke/clones/model/type/PlayerPosition.java.html">PlayerPosition</A> chosenPlayerPosition){
+<FONT ID="LN">525 </FONT><A NAME="525"></A>        <FONT ID="If">if</FONT>(chosenPlayerPosition.getPlayerType() == playerColor){
+<FONT ID="LN">526 </FONT><A NAME="526"></A>            List&lt;<A HREF="../../../../com/luke/clones/model/type/PlayerPosition.java.html">Position</A>&gt; possibleCloneFieldsList = <FONT ID="New">new</FONT> ArrayList&lt;<A HREF="../../../../com/luke/clones/model/type/PlayerPosition.java.html">Position</A>&gt;();
+<FONT ID="LN">527 </FONT><A NAME="527"></A>            List&lt;<A HREF="../../../../com/luke/clones/model/type/PlayerPosition.java.html">Position</A>&gt; possibleJumpFieldsList = <FONT ID="New">new</FONT> ArrayList&lt;<A HREF="../../../../com/luke/clones/model/type/PlayerPosition.java.html">Position</A>&gt;();
+<FONT ID="LN">528 </FONT><A NAME="528"></A>            
+<FONT ID="LN">529 </FONT><A NAME="529"></A>            <FONT ID="For">for</FONT>(<FONT ID="Int">int</FONT> i= chosenPlayerPosition.getX()-<FONT ID="IntegerLiteral">2</FONT>; i&lt;=chosenPlayerPosition.getX()+<FONT ID="IntegerLiteral">2</FONT>;i++){
+<FONT ID="LN">530 </FONT><A NAME="530"></A>                <FONT ID="For">for</FONT>(<FONT ID="Int">int</FONT> j= chosenPlayerPosition.getY()-<FONT ID="IntegerLiteral">2</FONT>;j&lt;=chosenPlayerPosition.getY()+<FONT ID="IntegerLiteral">2</FONT>;j++){
+<FONT ID="LN">531 </FONT><A NAME="531"></A>                    <FONT ID="If">if</FONT>(board.isClonePossible(chosenPlayerPosition.getX(), chosenPlayerPosition.getY(), i, j)){
+<FONT ID="LN">532 </FONT><A NAME="532"></A>                        possibleCloneFieldsList.add(<FONT ID="New">new</FONT> <A HREF="../../../../com/luke/clones/model/type/PlayerPosition.java.html">Position</A>(i, j));
+<FONT ID="LN">533 </FONT><A NAME="533"></A>                    }
+<FONT ID="LN">534 </FONT><A NAME="534"></A>                    <FONT ID="If">if</FONT>(board.isJumpPossible(chosenPlayerPosition.getX(), chosenPlayerPosition.getY(), i, j)){
+<FONT ID="LN">535 </FONT><A NAME="535"></A>                        possibleJumpFieldsList.add(<FONT ID="New">new</FONT> <A HREF="../../../../com/luke/clones/model/type/PlayerPosition.java.html">Position</A>(i, j));
+<FONT ID="LN">536 </FONT><A NAME="536"></A>                    }
+<FONT ID="LN">537 </FONT><A NAME="537"></A>                }
+<FONT ID="LN">538 </FONT><A NAME="538"></A>                
+<FONT ID="LN">539 </FONT><A NAME="539"></A>                layerStage.clear();
+<FONT ID="LN">540 </FONT><A NAME="540"></A>                
+<FONT ID="LN">541 </FONT><A NAME="541"></A>                <A HREF="../../../../com/luke/clones/model/type/PlayerType.java.html">PlayerType</A> playerType = chosenPlayerPosition.getPlayerType();
+<FONT ID="LN">542 </FONT><A NAME="542"></A>                Color playerColor = convertPlayerTypeToPlayerColor(playerType);
+<FONT ID="LN">543 </FONT><A NAME="543"></A>                
+<FONT ID="LN">544 </FONT><A NAME="544"></A>                Color markBallColor = <FONT ID="New">new</FONT> Color(playerColor.r, playerColor.g, playerColor.b, <FONT ID="FloatPointLiteral">0.4f</FONT>);
+<FONT ID="LN">545 </FONT><A NAME="545"></A>                <A HREF="../../../../com/luke/clones/model/actor/HighlightActor.java.html">HighlightActor</A> markBallLight = <FONT ID="New">new</FONT> <A HREF="../../../../com/luke/clones/model/actor/HighlightActor.java.html">HighlightActor</A>(markBallTexture, markBallColor, <FONT ID="New">new</FONT> <A HREF="../../../../com/luke/clones/model/type/PlayerPosition.java.html">Position</A>((chosenPlayerPosition.getY()*fieldSize)+unusedSpace/<FONT ID="IntegerLiteral">2</FONT>, chosenPlayerPosition.getX()*fieldSize));
+<FONT ID="LN">546 </FONT><A NAME="546"></A>                markBallLight.setPosition((chosenPlayerPosition.getY()*fieldSize)+unusedSpace/<FONT ID="IntegerLiteral">2</FONT>, chosenPlayerPosition.getX()*fieldSize);
+<FONT ID="LN">547 </FONT><A NAME="547"></A>                markBallLight.setSize(fieldSize, fieldSize);
+<FONT ID="LN">548 </FONT><A NAME="548"></A>                layerStage.addActor(markBallLight);
+<FONT ID="LN">549 </FONT><A NAME="549"></A>                
+<FONT ID="LN">550 </FONT><A NAME="550"></A>                <FONT ID="For">for</FONT>(<A HREF="../../../../com/luke/clones/model/type/PlayerPosition.java.html">Position</A> tempPosition: possibleCloneFieldsList){
+<FONT ID="LN">551 </FONT><A NAME="551"></A>                    Color highlightColor = <FONT ID="New">new</FONT> Color(playerColor.r, playerColor.g, playerColor.b, <FONT ID="FloatPointLiteral">0.4f</FONT>);
+<FONT ID="LN">552 </FONT><A NAME="552"></A>                    <A HREF="../../../../com/luke/clones/model/actor/HighlightActor.java.html">HighlightActor</A> light = <FONT ID="New">new</FONT> <A HREF="../../../../com/luke/clones/model/actor/HighlightActor.java.html">HighlightActor</A>(selectTexture, highlightColor, <FONT ID="New">new</FONT> <A HREF="../../../../com/luke/clones/model/type/PlayerPosition.java.html">Position</A>((tempPosition.getY()*fieldSize)+unusedSpace/<FONT ID="IntegerLiteral">2</FONT>, tempPosition.getX()*fieldSize));
+<FONT ID="LN">553 </FONT><A NAME="553"></A>                    light.setPosition((tempPosition.getY()*fieldSize)+unusedSpace/<FONT ID="IntegerLiteral">2</FONT>, tempPosition.getX()*fieldSize);
+<FONT ID="LN">554 </FONT><A NAME="554"></A>                    light.setSize(fieldSize, fieldSize);
+<FONT ID="LN">555 </FONT><A NAME="555"></A>                    layerStage.addActor(light);
+<FONT ID="LN">556 </FONT><A NAME="556"></A>                }
+<FONT ID="LN">557 </FONT><A NAME="557"></A>                <FONT ID="For">for</FONT>(<A HREF="../../../../com/luke/clones/model/type/PlayerPosition.java.html">Position</A> tempPosition: possibleJumpFieldsList){
+<FONT ID="LN">558 </FONT><A NAME="558"></A>                    Color highlightColor = <FONT ID="New">new</FONT> Color(playerColor.r, playerColor.g, playerColor.b, <FONT ID="FloatPointLiteral">0.15f</FONT>);
+<FONT ID="LN">559 </FONT><A NAME="559"></A>                    <A HREF="../../../../com/luke/clones/model/actor/HighlightActor.java.html">HighlightActor</A> light = <FONT ID="New">new</FONT> <A HREF="../../../../com/luke/clones/model/actor/HighlightActor.java.html">HighlightActor</A>(selectTexture, highlightColor, <FONT ID="New">new</FONT> <A HREF="../../../../com/luke/clones/model/type/PlayerPosition.java.html">Position</A>((tempPosition.getY()*fieldSize)+unusedSpace/<FONT ID="IntegerLiteral">2</FONT>, tempPosition.getX()*fieldSize));
+<FONT ID="LN">560 </FONT><A NAME="560"></A>                    light.setPosition((tempPosition.getY()*fieldSize)+unusedSpace/<FONT ID="IntegerLiteral">2</FONT>, tempPosition.getX()*fieldSize);
+<FONT ID="LN">561 </FONT><A NAME="561"></A>                    light.setSize(fieldSize, fieldSize);
+<FONT ID="LN">562 </FONT><A NAME="562"></A>                    layerStage.addActor(light);
+<FONT ID="LN">563 </FONT><A NAME="563"></A>                }
+<FONT ID="LN">564 </FONT><A NAME="564"></A>            }
+<FONT ID="LN">565 </FONT><A NAME="565"></A>            
+<FONT ID="LN">566 </FONT><A NAME="566"></A>        }
+<FONT ID="LN">567 </FONT><A NAME="567"></A>    }
+<FONT ID="LN">568 </FONT><A NAME="568"></A>    
+<FONT ID="LN">569 </FONT><A NAME="569"></A>    <FONT ID="Private">private</FONT> <FONT ID="Void">void</FONT> flashCurrentPlayerBalls(){
+<FONT ID="LN">570 </FONT><A NAME="570"></A>        layerStage.clear();
+<FONT ID="LN">571 </FONT><A NAME="571"></A>        <A HREF="../../../../com/luke/clones/model/type/PlayerType.java.html">PlayerType</A> currentPlayer = turn.getCurrentPlayer();
+<FONT ID="LN">572 </FONT><A NAME="572"></A>        <FONT ID="If">if</FONT>(currentPlayer != playerColor){
+<FONT ID="LN">573 </FONT><A NAME="573"></A>            <FONT ID="Return">return</FONT>;
+<FONT ID="LN">574 </FONT><A NAME="574"></A>        }
+<FONT ID="LN">575 </FONT><A NAME="575"></A>        
+<FONT ID="LN">576 </FONT><A NAME="576"></A>        List&lt;<A HREF="../../../../com/luke/clones/model/type/PlayerPosition.java.html">Position</A>&gt; ballsToFlash = getCurrentPlayerBallsPositions();
+<FONT ID="LN">577 </FONT><A NAME="577"></A>        
+<FONT ID="LN">578 </FONT><A NAME="578"></A><FONT ID="SingleLineComment">//      PlayerType playerType = turn.getCurrentPlayer();
+<FONT ID="LN">579 </FONT><A NAME="579"></A></FONT>        Color flashColor = Color.WHITE;
+<FONT ID="LN">580 </FONT><A NAME="580"></A>        
+<FONT ID="LN">581 </FONT><A NAME="581"></A>        List&lt;Color&gt; flashColors = <FONT ID="New">new</FONT> ArrayList&lt;Color&gt;();
+<FONT ID="LN">582 </FONT><A NAME="582"></A>        
+<FONT ID="LN">583 </FONT><A NAME="583"></A>        <FONT ID="For">for</FONT>(<FONT ID="Float">float</FONT> alpha = <FONT ID="FloatPointLiteral">0.0f</FONT>; alpha&lt;<FONT ID="FloatPointLiteral">1.0f</FONT>; alpha+=<FONT ID="FloatPointLiteral">0.05f</FONT>){
+<FONT ID="LN">584 </FONT><A NAME="584"></A>            Color colorToAdd = <FONT ID="New">new</FONT> Color(flashColor.r, flashColor.g, flashColor.b, alpha);
+<FONT ID="LN">585 </FONT><A NAME="585"></A>            flashColors.add(colorToAdd);
+<FONT ID="LN">586 </FONT><A NAME="586"></A>        }
+<FONT ID="LN">587 </FONT><A NAME="587"></A>        <FONT ID="For">for</FONT>(<FONT ID="Float">float</FONT> alpha = <FONT ID="FloatPointLiteral">1.0f</FONT>; alpha&gt;<FONT ID="FloatPointLiteral">0.0f</FONT>; alpha-=<FONT ID="FloatPointLiteral">0.05f</FONT>){
+<FONT ID="LN">588 </FONT><A NAME="588"></A>            Color colorToAdd = <FONT ID="New">new</FONT> Color(flashColor.r, flashColor.g, flashColor.b, alpha);
+<FONT ID="LN">589 </FONT><A NAME="589"></A>            flashColors.add(colorToAdd);
+<FONT ID="LN">590 </FONT><A NAME="590"></A>        }
+<FONT ID="LN">591 </FONT><A NAME="591"></A>        
+<FONT ID="LN">592 </FONT><A NAME="592"></A>        <FONT ID="For">for</FONT>(<A HREF="../../../../com/luke/clones/model/type/PlayerPosition.java.html">Position</A> tempPosition: ballsToFlash){
+<FONT ID="LN">593 </FONT><A NAME="593"></A>            <A HREF="../../../../com/luke/clones/model/actor/HighlightActorAnimatedColorChange.java.html">HighlightActorAnimatedColorChange</A> light = <FONT ID="New">new</FONT> <A HREF="../../../../com/luke/clones/model/actor/HighlightActorAnimatedColorChange.java.html">HighlightActorAnimatedColorChange</A>(markBallTexture, flashColors, <FONT ID="New">new</FONT> <A HREF="../../../../com/luke/clones/model/type/PlayerPosition.java.html">Position</A>((tempPosition.getY()*fieldSize)+unusedSpace/<FONT ID="IntegerLiteral">2</FONT>, tempPosition.getX()*fieldSize));
+<FONT ID="LN">594 </FONT><A NAME="594"></A>            light.setPosition((tempPosition.getY()*fieldSize)+unusedSpace/<FONT ID="IntegerLiteral">2</FONT>, tempPosition.getX()*fieldSize);
+<FONT ID="LN">595 </FONT><A NAME="595"></A>            light.setSize(fieldSize, fieldSize);
+<FONT ID="LN">596 </FONT><A NAME="596"></A>            layerStage.addActor(light);
+<FONT ID="LN">597 </FONT><A NAME="597"></A>        }
+<FONT ID="LN">598 </FONT><A NAME="598"></A>        
+<FONT ID="LN">599 </FONT><A NAME="599"></A>    }
+<FONT ID="LN">600 </FONT><A NAME="600"></A>    
+<FONT ID="LN">601 </FONT><A NAME="601"></A>    <FONT ID="Private">private</FONT> List&lt;<A HREF="../../../../com/luke/clones/model/type/PlayerPosition.java.html">Position</A>&gt; getCurrentPlayerBallsPositions(){
+<FONT ID="LN">602 </FONT><A NAME="602"></A>        List&lt;<A HREF="../../../../com/luke/clones/model/type/PlayerPosition.java.html">Position</A>&gt; balls = <FONT ID="New">new</FONT> ArrayList&lt;<A HREF="../../../../com/luke/clones/model/type/PlayerPosition.java.html">Position</A>&gt;();
+<FONT ID="LN">603 </FONT><A NAME="603"></A>
+<FONT ID="LN">604 </FONT><A NAME="604"></A>        <FONT ID="For">for</FONT>(<FONT ID="Int">int</FONT> i=<FONT ID="IntegerLiteral">0</FONT>; i&lt;board.getWidth(); i++){
+<FONT ID="LN">605 </FONT><A NAME="605"></A>            <FONT ID="For">for</FONT>(<FONT ID="Int">int</FONT> j=<FONT ID="IntegerLiteral">0</FONT>; j&lt;board.getHeight(); j++){
+<FONT ID="LN">606 </FONT><A NAME="606"></A>                <FONT ID="Boolean">boolean</FONT> fieldWithBallWithPlayerColor = board.getFieldType(i, j)==FieldType.TAKEN &amp;&amp; 
+<FONT ID="LN">607 </FONT><A NAME="607"></A>                        board.getFieldPlayer(i, j)==playerColor;
+<FONT ID="LN">608 </FONT><A NAME="608"></A>                <FONT ID="If">if</FONT>(fieldWithBallWithPlayerColor){
+<FONT ID="LN">609 </FONT><A NAME="609"></A>                    balls.add(<FONT ID="New">new</FONT> <A HREF="../../../../com/luke/clones/model/type/PlayerPosition.java.html">Position</A>(i,j));
+<FONT ID="LN">610 </FONT><A NAME="610"></A>                }
+<FONT ID="LN">611 </FONT><A NAME="611"></A>            }
+<FONT ID="LN">612 </FONT><A NAME="612"></A>        }
+<FONT ID="LN">613 </FONT><A NAME="613"></A>        
+<FONT ID="LN">614 </FONT><A NAME="614"></A>        <FONT ID="Return">return</FONT> balls;
+<FONT ID="LN">615 </FONT><A NAME="615"></A>    }
+<FONT ID="LN">616 </FONT><A NAME="616"></A>    
+<FONT ID="LN">617 </FONT><A NAME="617"></A>    <FONT ID="Private">private</FONT> Color convertPlayerTypeToPlayerColor(<A HREF="../../../../com/luke/clones/model/type/PlayerType.java.html">PlayerType</A> playerType){
+<FONT ID="LN">618 </FONT><A NAME="618"></A>        Color playerColor;
+<FONT ID="LN">619 </FONT><A NAME="619"></A>        <FONT ID="If">if</FONT>(playerType == PlayerType.BLUE) playerColor = Color.BLUE;
+<FONT ID="LN">620 </FONT><A NAME="620"></A>        <FONT ID="Else">else</FONT> <FONT ID="If">if</FONT>(playerType == PlayerType.GREEN) playerColor = Color.GREEN;
+<FONT ID="LN">621 </FONT><A NAME="621"></A>        <FONT ID="Else">else</FONT> <FONT ID="If">if</FONT>(playerType == PlayerType.RED) playerColor = Color.RED;
+<FONT ID="LN">622 </FONT><A NAME="622"></A>        <FONT ID="Else">else</FONT> <FONT ID="If">if</FONT>(playerType == PlayerType.ORANGE) playerColor = Color.ORANGE;
+<FONT ID="LN">623 </FONT><A NAME="623"></A>        <FONT ID="Else">else</FONT> playerColor = Color.WHITE;
+<FONT ID="LN">624 </FONT><A NAME="624"></A>        <FONT ID="Return">return</FONT> playerColor;
+<FONT ID="LN">625 </FONT><A NAME="625"></A>    }
+<FONT ID="LN">626 </FONT><A NAME="626"></A>
+<FONT ID="LN">627 </FONT><A NAME="627"></A>    @Override
+<FONT ID="LN">628 </FONT><A NAME="628"></A>    <FONT ID="Public">public</FONT> <FONT ID="Void">void</FONT> connected(Connection connection) {
+<FONT ID="LN">629 </FONT><A NAME="629"></A>        
+<FONT ID="LN">630 </FONT><A NAME="630"></A>    }
+<FONT ID="LN">631 </FONT><A NAME="631"></A>
+<FONT ID="LN">632 </FONT><A NAME="632"></A>    @Override
+<FONT ID="LN">633 </FONT><A NAME="633"></A>    <FONT ID="Public">public</FONT> <FONT ID="Synchronized">synchronized</FONT> <FONT ID="Void">void</FONT> received(Connection connection, <FONT ID="Final">final</FONT> Object obj) {
+<FONT ID="LN">634 </FONT><A NAME="634"></A>        <FONT ID="If">if</FONT>(obj <FONT ID="InstanceOf">instanceof</FONT> <A HREF="../../../../com/luke/clones/network/communication/ActionTypeUpdateRoom.java.html">UpdateRoom</A>){
+<FONT ID="LN">635 </FONT><A NAME="635"></A>            NetworkConfig.log(<FONT ID="StringLiteral">"received update room"</FONT>);
+<FONT ID="LN">636 </FONT><A NAME="636"></A>            <FONT ID="Final">final</FONT> <A HREF="../../../../com/luke/clones/network/communication/ActionTypeUpdateRoom.java.html">UpdateRoom</A> updateRoom = (<A HREF="../../../../com/luke/clones/network/communication/ActionTypeUpdateRoom.java.html">UpdateRoom</A>) obj;
+<FONT ID="LN">637 </FONT><A NAME="637"></A>            <A HREF="../../../../com/luke/clones/network/communication/ActionTypeUpdateRoom.java.html">ActionTypeUpdateRoom</A> actionType = updateRoom.getActionType();
+<FONT ID="LN">638 </FONT><A NAME="638"></A>            <FONT ID="If">if</FONT>(actionType==ActionTypeUpdateRoom.BACK_TO_ROOM_LIST){
+<FONT ID="LN">639 </FONT><A NAME="639"></A>                <FONT ID="If">if</FONT>(updateRoom.getNewAchievements()!=<FONT ID="Null">null</FONT> &amp;&amp; updateRoom.getNewAchievements().length&gt;<FONT ID="IntegerLiteral">0</FONT>){
+<FONT ID="LN">640 </FONT><A NAME="640"></A>                     Gdx.app.postRunnable(<FONT ID="New">new</FONT> Runnable() {
+<FONT ID="LN">641 </FONT><A NAME="641"></A>                         <FONT ID="Public">public</FONT> <FONT ID="Void">void</FONT> run() {
+<FONT ID="LN">642 </FONT><A NAME="642"></A>                             List&lt;<A HREF="../../../../com/luke/clones/messages/QuickMessage.java.html">QuickMessage</A>&gt; quickMessagesAboutAchievements = QuickMessageUtil.prepareQuickMessagesWithNewAchievements(updateRoom.getNewAchievements(),skin, smallSkin, startScreen);
+<FONT ID="LN">643 </FONT><A NAME="643"></A>                             startScreen.setToOnlineWithoutNameWithMultipleMessages(clonesClient, <FONT ID="False">false</FONT>, quickMessagesAboutAchievements);
+<FONT ID="LN">644 </FONT><A NAME="644"></A>                         }
+<FONT ID="LN">645 </FONT><A NAME="645"></A>                     });
+<FONT ID="LN">646 </FONT><A NAME="646"></A>                }
+<FONT ID="LN">647 </FONT><A NAME="647"></A>                <FONT ID="Else">else</FONT>{
+<FONT ID="LN">648 </FONT><A NAME="648"></A>                 Gdx.app.postRunnable(<FONT ID="New">new</FONT> Runnable() {
+<FONT ID="LN">649 </FONT><A NAME="649"></A>                     <FONT ID="Public">public</FONT> <FONT ID="Void">void</FONT> run() {
+<FONT ID="LN">650 </FONT><A NAME="650"></A>                         startScreen.setToOnlineWithoutName(clonesClient, <FONT ID="False">false</FONT>);
+<FONT ID="LN">651 </FONT><A NAME="651"></A>                     }});
+<FONT ID="LN">652 </FONT><A NAME="652"></A>                }
+<FONT ID="LN">653 </FONT><A NAME="653"></A>                startScreen.getAndroidNativeHandler().showBannerAds();
+<FONT ID="LN">654 </FONT><A NAME="654"></A>                interstitialAdsManager.afterLeaveRoom(startScreen.getAndroidNativeHandler(), mainStage, skin);
+<FONT ID="LN">655 </FONT><A NAME="655"></A>            }
+<FONT ID="LN">656 </FONT><A NAME="656"></A>            <FONT ID="If">if</FONT>(actionType==ActionTypeUpdateRoom.BACK_TO_ROOM_INTERIOR){
+<FONT ID="LN">657 </FONT><A NAME="657"></A>                <FONT ID="If">if</FONT>(updateRoom.getMessageToShow()==MessageToShowType.ONE_OF_PLAYERS_LEFT_ROOM){
+<FONT ID="LN">658 </FONT><A NAME="658"></A>                 Gdx.app.postRunnable(<FONT ID="New">new</FONT> Runnable() {
+<FONT ID="LN">659 </FONT><A NAME="659"></A>                     <FONT ID="Public">public</FONT> <FONT ID="Void">void</FONT> run() {
+<FONT ID="LN">660 </FONT><A NAME="660"></A>                         startScreen.setToOnlineWithoutNameWithMessage(clonesClient, <FONT ID="True">true</FONT>, QuickMessagePresets.ONE_OF_PLAYERS_LEFT_ROOM.getQuickMessage());
+<FONT ID="LN">661 </FONT><A NAME="661"></A>                     }});
+<FONT ID="LN">662 </FONT><A NAME="662"></A>                }
+<FONT ID="LN">663 </FONT><A NAME="663"></A>                <FONT ID="Else">else</FONT> <FONT ID="If">if</FONT>(updateRoom.getMessageToShow()==MessageToShowType.ADMIN_STOPPED){
+<FONT ID="LN">664 </FONT><A NAME="664"></A>                     Gdx.app.postRunnable(<FONT ID="New">new</FONT> Runnable() {
+<FONT ID="LN">665 </FONT><A NAME="665"></A>                         <FONT ID="Public">public</FONT> <FONT ID="Void">void</FONT> run() {
+<FONT ID="LN">666 </FONT><A NAME="666"></A>                             startScreen.setToOnlineWithoutNameWithMessage(clonesClient, <FONT ID="True">true</FONT>, QuickMessagePresets.ADMIN_STOPPED.getQuickMessage());
+<FONT ID="LN">667 </FONT><A NAME="667"></A>                         }});
+<FONT ID="LN">668 </FONT><A NAME="668"></A>                }
+<FONT ID="LN">669 </FONT><A NAME="669"></A>                <FONT ID="Else">else</FONT>{
+<FONT ID="LN">670 </FONT><A NAME="670"></A>                     Gdx.app.postRunnable(<FONT ID="New">new</FONT> Runnable() {
+<FONT ID="LN">671 </FONT><A NAME="671"></A>                         <FONT ID="Public">public</FONT> <FONT ID="Void">void</FONT> run() {
+<FONT ID="LN">672 </FONT><A NAME="672"></A>                             startScreen.setToOnlineWithoutName(clonesClient, <FONT ID="True">true</FONT>);
+<FONT ID="LN">673 </FONT><A NAME="673"></A>                         }});
+<FONT ID="LN">674 </FONT><A NAME="674"></A>                }
+<FONT ID="LN">675 </FONT><A NAME="675"></A>                startScreen.getAndroidNativeHandler().showBannerAds();
+<FONT ID="LN">676 </FONT><A NAME="676"></A>            }
+<FONT ID="LN">677 </FONT><A NAME="677"></A>        }
+<FONT ID="LN">678 </FONT><A NAME="678"></A>        <FONT ID="If">if</FONT>(obj <FONT ID="InstanceOf">instanceof</FONT> <A HREF="../../../../com/luke/clones/network/communication/UpdateBoard.java.html">UpdateBoard</A>){
+<FONT ID="LN">679 </FONT><A NAME="679"></A>            <A HREF="../../../../com/luke/clones/network/communication/UpdateBoard.java.html">UpdateBoard</A> update = (<A HREF="../../../../com/luke/clones/network/communication/UpdateBoard.java.html">UpdateBoard</A>) obj;
+<FONT ID="LN">680 </FONT><A NAME="680"></A>            <A HREF="../../../../com/luke/clones/model/type/PlayerPosition.java.html">PlayerPosition</A> playerPos = update.getPlayerPosition();
+<FONT ID="LN">681 </FONT><A NAME="681"></A>            <A HREF="../../../../com/luke/clones/model/type/PlayerPosition.java.html">Position</A> movePos = update.getPosition();
+<FONT ID="LN">682 </FONT><A NAME="682"></A>            
+<FONT ID="LN">683 </FONT><A NAME="683"></A>            <FONT ID="If">if</FONT>(update.getActionType()==ActionTypeBoard.CLONE){
+<FONT ID="LN">684 </FONT><A NAME="684"></A>                board.clone(playerPos.getX(), playerPos.getY(), movePos.getX(), movePos.getY());
+<FONT ID="LN">685 </FONT><A NAME="685"></A>                soundManager.play(SoundType.CLONE);
+<FONT ID="LN">686 </FONT><A NAME="686"></A>            }
+<FONT ID="LN">687 </FONT><A NAME="687"></A>            <FONT ID="Else">else</FONT> <FONT ID="If">if</FONT>(update.getActionType()==ActionTypeBoard.JUMP){
+<FONT ID="LN">688 </FONT><A NAME="688"></A>                board.jump(playerPos.getX(), playerPos.getY(), movePos.getX(), movePos.getY());
+<FONT ID="LN">689 </FONT><A NAME="689"></A>                soundManager.play(SoundType.JUMP);
+<FONT ID="LN">690 </FONT><A NAME="690"></A>            }
+<FONT ID="LN">691 </FONT><A NAME="691"></A>            <FONT ID="Else">else</FONT> <FONT ID="If">if</FONT>(update.getActionType()==ActionTypeBoard.NEXT_TURN){
+<FONT ID="LN">692 </FONT><A NAME="692"></A>                <FONT ID="SingleLineComment">//just do nothing
+<FONT ID="LN">693 </FONT><A NAME="693"></A></FONT>            }
+<FONT ID="LN">694 </FONT><A NAME="694"></A>            
+<FONT ID="LN">695 </FONT><A NAME="695"></A>            turn.nextTurn();
+<FONT ID="LN">696 </FONT><A NAME="696"></A>            updateStage();
+<FONT ID="LN">697 </FONT><A NAME="697"></A>        }
+<FONT ID="LN">698 </FONT><A NAME="698"></A>        <FONT ID="SingleLineComment">//to delete
+<FONT ID="LN">699 </FONT><A NAME="699"></A></FONT>        <FONT ID="If">if</FONT>(obj <FONT ID="InstanceOf">instanceof</FONT> <A HREF="../../../../com/luke/clones/network/communication/UpdateGame.java.html">UpdateGame</A>){
+<FONT ID="LN">700 </FONT><A NAME="700"></A>            <A HREF="../../../../com/luke/clones/network/communication/UpdateGame.java.html">UpdateGame</A> update = (<A HREF="../../../../com/luke/clones/network/communication/UpdateGame.java.html">UpdateGame</A>) obj;
+<FONT ID="LN">701 </FONT><A NAME="701"></A>            <FONT ID="If">if</FONT>(update.getActionType()==ActionTypeGame.NEXT_TURN){
+<FONT ID="LN">702 </FONT><A NAME="702"></A>                turn.nextTurn();
+<FONT ID="LN">703 </FONT><A NAME="703"></A>                updateStage();
+<FONT ID="LN">704 </FONT><A NAME="704"></A>            }
+<FONT ID="LN">705 </FONT><A NAME="705"></A>        }
+<FONT ID="LN">706 </FONT><A NAME="706"></A>        
+<FONT ID="LN">707 </FONT><A NAME="707"></A>        <FONT ID="If">if</FONT>(obj <FONT ID="InstanceOf">instanceof</FONT> <A HREF="../../../../com/luke/clones/network/communication/GameOver.java.html">GameOver</A>){
+<FONT ID="LN">708 </FONT><A NAME="708"></A>            Gdx.app.postRunnable(<FONT ID="New">new</FONT> Runnable() {
+<FONT ID="LN">709 </FONT><A NAME="709"></A>                 <FONT ID="Public">public</FONT> <FONT ID="Void">void</FONT> run() {
+<FONT ID="LN">710 </FONT><A NAME="710"></A>            System.out.println(<FONT ID="StringLiteral">"game over received"</FONT>);
+<FONT ID="LN">711 </FONT><A NAME="711"></A>                     
+<FONT ID="LN">712 </FONT><A NAME="712"></A>            interstitialAdsManager.afterRoundFinish();
+<FONT ID="LN">713 </FONT><A NAME="713"></A>
+<FONT ID="LN">714 </FONT><A NAME="714"></A>            stopMeasureAndSignalizePlayerMoveTime();
+<FONT ID="LN">715 </FONT><A NAME="715"></A>            layerStage.clear();
+<FONT ID="LN">716 </FONT><A NAME="716"></A>                     
+<FONT ID="LN">717 </FONT><A NAME="717"></A>            <A HREF="../../../../com/luke/clones/network/communication/GameOver.java.html">GameOver</A> over = (<A HREF="../../../../com/luke/clones/network/communication/GameOver.java.html">GameOver</A>) obj;
+<FONT ID="LN">718 </FONT><A NAME="718"></A>            
+<FONT ID="LN">719 </FONT><A NAME="719"></A>            <A HREF="../../../../com/luke/clones/model/PlayerScore.java.html">PlayerScore</A>[] playerScore = over.getPlayerScore();
+<FONT ID="LN">720 </FONT><A NAME="720"></A>            <A HREF="../../../../com/luke/clones/model/TurnStats.java.html">TurnStats</A> turnStats = over.getTurnStats();
+<FONT ID="LN">721 </FONT><A NAME="721"></A>            <FONT ID="Boolean">boolean</FONT> firstRound = over.isFirstRound();
+<FONT ID="LN">722 </FONT><A NAME="722"></A>                    
+<FONT ID="LN">723 </FONT><A NAME="723"></A>                    Skin tSkin = smallSkin;
+<FONT ID="LN">724 </FONT><A NAME="724"></A>                    endTable = <FONT ID="New">new</FONT> Table(tSkin);
+<FONT ID="LN">725 </FONT><A NAME="725"></A>                    endTable.setBackground(tSkin.getDrawable(<FONT ID="StringLiteral">"message-round-large-bright"</FONT>));
+<FONT ID="LN">726 </FONT><A NAME="726"></A>                    endTable.setSize(screenWidth, <FONT ID="IntegerLiteral">240</FONT>);
+<FONT ID="LN">727 </FONT><A NAME="727"></A>                    <FONT ID="If">if</FONT>(playerScore.length&gt;<FONT ID="IntegerLiteral">3</FONT>){
+<FONT ID="LN">728 </FONT><A NAME="728"></A>                        endTable.setHeight(endTable.getHeight()+<FONT ID="IntegerLiteral">80</FONT>);
+<FONT ID="LN">729 </FONT><A NAME="729"></A>                    }
+<FONT ID="LN">730 </FONT><A NAME="730"></A>                    endTable.setPosition(screenWidth/<FONT ID="IntegerLiteral">2</FONT>-endTable.getWidth()/<FONT ID="IntegerLiteral">2</FONT>, screenHeight/<FONT ID="IntegerLiteral">2</FONT>-endTable.getHeight()/<FONT ID="IntegerLiteral">2</FONT>);
+<FONT ID="LN">731 </FONT><A NAME="731"></A>                    
+<FONT ID="LN">732 </FONT><A NAME="732"></A>                    Label placeLabel = <FONT ID="New">new</FONT> Label(<FONT ID="StringLiteral">""</FONT>, skin);
+<FONT ID="LN">733 </FONT><A NAME="733"></A><FONT ID="SingleLineComment">//                  if(playerScore.length&gt;0 &amp;&amp; playerScore[0].getPlayerType()==playerColor){
+<FONT ID="LN">734 </FONT><A NAME="734"></A></FONT><FONT ID="SingleLineComment">//                      placeLabel.setText("You won!");
+<FONT ID="LN">735 </FONT><A NAME="735"></A></FONT><FONT ID="SingleLineComment">//                  }
+<FONT ID="LN">736 </FONT><A NAME="736"></A></FONT><FONT ID="SingleLineComment">//                  else if(playerScore.length&gt;1 &amp;&amp; playerScore[1].getPlayerType()==playerColor){
+<FONT ID="LN">737 </FONT><A NAME="737"></A></FONT><FONT ID="SingleLineComment">//                      placeLabel.setText("You were 2nd");
+<FONT ID="LN">738 </FONT><A NAME="738"></A></FONT><FONT ID="SingleLineComment">//                  }
+<FONT ID="LN">739 </FONT><A NAME="739"></A></FONT><FONT ID="SingleLineComment">//                  else if(playerScore.length&gt;2 &amp;&amp; playerScore[2].getPlayerType()==playerColor){
+<FONT ID="LN">740 </FONT><A NAME="740"></A></FONT><FONT ID="SingleLineComment">//                      placeLabel.setText("You were 3rd");
+<FONT ID="LN">741 </FONT><A NAME="741"></A></FONT><FONT ID="SingleLineComment">//                  }
+<FONT ID="LN">742 </FONT><A NAME="742"></A></FONT><FONT ID="SingleLineComment">//                  else if(playerScore.length&gt;3 &amp;&amp; playerScore[3].getPlayerType()==playerColor){
+<FONT ID="LN">743 </FONT><A NAME="743"></A></FONT><FONT ID="SingleLineComment">//                      placeLabel.setText("You were 4th");
+<FONT ID="LN">744 </FONT><A NAME="744"></A></FONT><FONT ID="SingleLineComment">//                  }
+<FONT ID="LN">745 </FONT><A NAME="745"></A></FONT>                    <FONT ID="Int">int</FONT> playerPlace = getPlayerPlace(playerScore);
+<FONT ID="LN">746 </FONT><A NAME="746"></A>                    
+<FONT ID="LN">747 </FONT><A NAME="747"></A>                    <FONT ID="For">for</FONT>(<FONT ID="Int">int</FONT> i=playerPlace; i&gt;=<FONT ID="IntegerLiteral">0</FONT>; i--){
+<FONT ID="LN">748 </FONT><A NAME="748"></A>                        <FONT ID="If">if</FONT>(i==<FONT ID="IntegerLiteral">0</FONT> || playerScore[i].getPlayerScore()!=playerScore[i-<FONT ID="IntegerLiteral">1</FONT>].getPlayerScore()){
+<FONT ID="LN">749 </FONT><A NAME="749"></A>                            placeLabel.setText(getPlaceDescriptionByPlace(i));
+<FONT ID="LN">750 </FONT><A NAME="750"></A>                            <FONT ID="Break">break</FONT>;
+<FONT ID="LN">751 </FONT><A NAME="751"></A>                        }
+<FONT ID="LN">752 </FONT><A NAME="752"></A>                    }
+<FONT ID="LN">753 </FONT><A NAME="753"></A>                    
+<FONT ID="LN">754 </FONT><A NAME="754"></A>                    endTable.add(placeLabel).colspan(<FONT ID="IntegerLiteral">5</FONT>);
+<FONT ID="LN">755 </FONT><A NAME="755"></A>                    
+<FONT ID="LN">756 </FONT><A NAME="756"></A>                    endTable.row();
+<FONT ID="LN">757 </FONT><A NAME="757"></A>                    
+<FONT ID="LN">758 </FONT><A NAME="758"></A>                    Label titleLabelUpper1 = <FONT ID="New">new</FONT> Label(<FONT ID="StringLiteral">""</FONT>, tSkin);
+<FONT ID="LN">759 </FONT><A NAME="759"></A>                    Label titleLabelUpper2 = <FONT ID="New">new</FONT> Label(<FONT ID="StringLiteral">""</FONT>, tSkin);
+<FONT ID="LN">760 </FONT><A NAME="760"></A>                    Label titleLabelUpper3 = <FONT ID="New">new</FONT> Label(<FONT ID="StringLiteral">"Balls scored"</FONT>, tSkin);
+<FONT ID="LN">761 </FONT><A NAME="761"></A>                    Label titleLabelUpper4 = <FONT ID="New">new</FONT> Label(<FONT ID="StringLiteral">"Balls scored"</FONT>, tSkin);
+<FONT ID="LN">762 </FONT><A NAME="762"></A>                    Label titleLabelUpper5 = <FONT ID="New">new</FONT> Label(<FONT ID="StringLiteral">"Games"</FONT>, tSkin);
+<FONT ID="LN">763 </FONT><A NAME="763"></A>                    
+<FONT ID="LN">764 </FONT><A NAME="764"></A>                    endTable.add(titleLabelUpper1).spaceLeft(<FONT ID="IntegerLiteral">10</FONT>).spaceRight(<FONT ID="IntegerLiteral">10</FONT>).spaceTop(<FONT ID="IntegerLiteral">10</FONT>);
+<FONT ID="LN">765 </FONT><A NAME="765"></A>                    endTable.add(titleLabelUpper2).spaceLeft(<FONT ID="IntegerLiteral">10</FONT>).spaceRight(<FONT ID="IntegerLiteral">10</FONT>).spaceTop(<FONT ID="IntegerLiteral">10</FONT>);
+<FONT ID="LN">766 </FONT><A NAME="766"></A>                    endTable.add(titleLabelUpper3).spaceLeft(<FONT ID="IntegerLiteral">10</FONT>).spaceRight(<FONT ID="IntegerLiteral">10</FONT>).spaceTop(<FONT ID="IntegerLiteral">10</FONT>);
+<FONT ID="LN">767 </FONT><A NAME="767"></A>                    <FONT ID="If">if</FONT>(firstRound==<FONT ID="False">false</FONT>){
+<FONT ID="LN">768 </FONT><A NAME="768"></A>                        endTable.add(titleLabelUpper4).spaceLeft(<FONT ID="IntegerLiteral">10</FONT>).spaceRight(<FONT ID="IntegerLiteral">10</FONT>).spaceTop(<FONT ID="IntegerLiteral">10</FONT>);
+<FONT ID="LN">769 </FONT><A NAME="769"></A>                        endTable.add(titleLabelUpper5).spaceLeft(<FONT ID="IntegerLiteral">10</FONT>).spaceRight(<FONT ID="IntegerLiteral">10</FONT>).spaceTop(<FONT ID="IntegerLiteral">10</FONT>);
+<FONT ID="LN">770 </FONT><A NAME="770"></A>                    }
+<FONT ID="LN">771 </FONT><A NAME="771"></A>                    <FONT ID="Else">else</FONT>{
+<FONT ID="LN">772 </FONT><A NAME="772"></A>                        endTable.add().spaceLeft(<FONT ID="IntegerLiteral">10</FONT>).spaceRight(<FONT ID="IntegerLiteral">10</FONT>).spaceTop(<FONT ID="IntegerLiteral">10</FONT>);
+<FONT ID="LN">773 </FONT><A NAME="773"></A>                        endTable.add().spaceLeft(<FONT ID="IntegerLiteral">10</FONT>).spaceRight(<FONT ID="IntegerLiteral">10</FONT>).spaceTop(<FONT ID="IntegerLiteral">10</FONT>);
+<FONT ID="LN">774 </FONT><A NAME="774"></A>                    }
+<FONT ID="LN">775 </FONT><A NAME="775"></A>                    endTable.row();
+<FONT ID="LN">776 </FONT><A NAME="776"></A>                    
+<FONT ID="LN">777 </FONT><A NAME="777"></A>                    Label titleLabel1 = <FONT ID="New">new</FONT> Label(<FONT ID="StringLiteral">"Pos."</FONT>, tSkin);
+<FONT ID="LN">778 </FONT><A NAME="778"></A>                    Label titleLabel2 = <FONT ID="New">new</FONT> Label(<FONT ID="StringLiteral">"Player"</FONT>, tSkin);
+<FONT ID="LN">779 </FONT><A NAME="779"></A>                    Label titleLabel3 = <FONT ID="New">new</FONT> Label(<FONT ID="StringLiteral">"this round"</FONT>, tSkin);
+<FONT ID="LN">780 </FONT><A NAME="780"></A>                    Label titleLabel4 = <FONT ID="New">new</FONT> Label(<FONT ID="StringLiteral">"overall"</FONT>, tSkin);
+<FONT ID="LN">781 </FONT><A NAME="781"></A>                    Label titleLabel5 = <FONT ID="New">new</FONT> Label(<FONT ID="StringLiteral">"won"</FONT>, tSkin);
+<FONT ID="LN">782 </FONT><A NAME="782"></A>                    
+<FONT ID="LN">783 </FONT><A NAME="783"></A>                    endTable.add(titleLabel1).spaceLeft(<FONT ID="IntegerLiteral">10</FONT>).spaceRight(<FONT ID="IntegerLiteral">10</FONT>).spaceBottom(<FONT ID="IntegerLiteral">10</FONT>);
+<FONT ID="LN">784 </FONT><A NAME="784"></A>                    endTable.add(titleLabel2).spaceLeft(<FONT ID="IntegerLiteral">10</FONT>).spaceRight(<FONT ID="IntegerLiteral">10</FONT>).spaceBottom(<FONT ID="IntegerLiteral">10</FONT>);
+<FONT ID="LN">785 </FONT><A NAME="785"></A>                    endTable.add(titleLabel3).spaceLeft(<FONT ID="IntegerLiteral">10</FONT>).spaceRight(<FONT ID="IntegerLiteral">10</FONT>).spaceBottom(<FONT ID="IntegerLiteral">10</FONT>);
+<FONT ID="LN">786 </FONT><A NAME="786"></A>                    <FONT ID="If">if</FONT>(firstRound==<FONT ID="False">false</FONT>){
+<FONT ID="LN">787 </FONT><A NAME="787"></A>                        endTable.add(titleLabel4).spaceLeft(<FONT ID="IntegerLiteral">10</FONT>).spaceRight(<FONT ID="IntegerLiteral">10</FONT>).spaceBottom(<FONT ID="IntegerLiteral">10</FONT>);
+<FONT ID="LN">788 </FONT><A NAME="788"></A>                        endTable.add(titleLabel5).spaceLeft(<FONT ID="IntegerLiteral">10</FONT>).spaceRight(<FONT ID="IntegerLiteral">10</FONT>).spaceBottom(<FONT ID="IntegerLiteral">10</FONT>);
+<FONT ID="LN">789 </FONT><A NAME="789"></A>                    }
+<FONT ID="LN">790 </FONT><A NAME="790"></A>                    <FONT ID="Else">else</FONT>{
+<FONT ID="LN">791 </FONT><A NAME="791"></A>                        endTable.add().spaceLeft(<FONT ID="IntegerLiteral">10</FONT>).spaceRight(<FONT ID="IntegerLiteral">10</FONT>).spaceBottom(<FONT ID="IntegerLiteral">10</FONT>);
+<FONT ID="LN">792 </FONT><A NAME="792"></A>                        endTable.add().spaceLeft(<FONT ID="IntegerLiteral">10</FONT>).spaceRight(<FONT ID="IntegerLiteral">10</FONT>).spaceBottom(<FONT ID="IntegerLiteral">10</FONT>);
+<FONT ID="LN">793 </FONT><A NAME="793"></A>                    }
+<FONT ID="LN">794 </FONT><A NAME="794"></A>                    endTable.row();
+<FONT ID="LN">795 </FONT><A NAME="795"></A>                    
+<FONT ID="LN">796 </FONT><A NAME="796"></A>                    <FONT ID="Int">int</FONT> j=<FONT ID="IntegerLiteral">0</FONT>;
+<FONT ID="LN">797 </FONT><A NAME="797"></A>                    Label tLabel1=<FONT ID="Null">null</FONT>,tLabel2=<FONT ID="Null">null</FONT>, tLabel3=<FONT ID="Null">null</FONT>, tLabel4=<FONT ID="Null">null</FONT>, tLabel5=<FONT ID="Null">null</FONT>;
+<FONT ID="LN">798 </FONT><A NAME="798"></A>                    <FONT ID="For">for</FONT>(<FONT ID="Int">int</FONT> i=<FONT ID="IntegerLiteral">0</FONT>;i&lt;playerScore.length;i++){
+<FONT ID="LN">799 </FONT><A NAME="799"></A>                        <FONT ID="If">if</FONT>(i&gt;<FONT ID="IntegerLiteral">0</FONT> &amp;&amp; playerScore[i-<FONT ID="IntegerLiteral">1</FONT>].getPlayerScore()==playerScore[i].getPlayerScore()){
+<FONT ID="LN">800 </FONT><A NAME="800"></A>                            tLabel1 = <FONT ID="New">new</FONT> Label(<FONT ID="StringLiteral">""</FONT>, tSkin);
+<FONT ID="LN">801 </FONT><A NAME="801"></A>                        }
+<FONT ID="LN">802 </FONT><A NAME="802"></A>                        <FONT ID="Else">else</FONT>{
+<FONT ID="LN">803 </FONT><A NAME="803"></A>                            j++;
+<FONT ID="LN">804 </FONT><A NAME="804"></A>                            tLabel1 = <FONT ID="New">new</FONT> Label(j+<FONT ID="StringLiteral">"."</FONT>, tSkin);
+<FONT ID="LN">805 </FONT><A NAME="805"></A>                        }
+<FONT ID="LN">806 </FONT><A NAME="806"></A>                        
+<FONT ID="LN">807 </FONT><A NAME="807"></A>                        tLabel2 = <FONT ID="New">new</FONT> Label(<FONT ID="StringLiteral">""</FONT>+playerScore[i].getPlayerType(), tSkin);
+<FONT ID="LN">808 </FONT><A NAME="808"></A>                        <FONT ID="If">if</FONT>(playerScore[i].getPlayerType()==playerColor){
+<FONT ID="LN">809 </FONT><A NAME="809"></A>                            tLabel2.setText(tLabel2.getText()+<FONT ID="StringLiteral">" [YOU]"</FONT>);
+<FONT ID="LN">810 </FONT><A NAME="810"></A>                        }
+<FONT ID="LN">811 </FONT><A NAME="811"></A>                        tLabel3 = <FONT ID="New">new</FONT> Label(<FONT ID="StringLiteral">""</FONT>+playerScore[i].getPlayerScore(), tSkin);
+<FONT ID="LN">812 </FONT><A NAME="812"></A>                        <FONT ID="If">if</FONT>(firstRound==<FONT ID="False">false</FONT>){
+<FONT ID="LN">813 </FONT><A NAME="813"></A>                            <FONT ID="Try">try</FONT> {
+<FONT ID="LN">814 </FONT><A NAME="814"></A>                                tLabel4 = <FONT ID="New">new</FONT> Label(<FONT ID="StringLiteral">""</FONT>+turnStats.getPlayerGameBalls(playerScore[i].getPlayerType()), tSkin);
+<FONT ID="LN">815 </FONT><A NAME="815"></A>                                tLabel5 = <FONT ID="New">new</FONT> Label(<FONT ID="StringLiteral">""</FONT>+turnStats.getPlayerGameWons(playerScore[i].getPlayerType()), tSkin);
+<FONT ID="LN">816 </FONT><A NAME="816"></A>                            } <FONT ID="Catch">catch</FONT> (TurnStatsArgumentException e) {
+<FONT ID="LN">817 </FONT><A NAME="817"></A>                                e.printStackTrace();
+<FONT ID="LN">818 </FONT><A NAME="818"></A>                            }
+<FONT ID="LN">819 </FONT><A NAME="819"></A>                        }
+<FONT ID="LN">820 </FONT><A NAME="820"></A>                        
+<FONT ID="LN">821 </FONT><A NAME="821"></A>                        <FONT ID="If">if</FONT>(playerScore[<FONT ID="IntegerLiteral">0</FONT>].getPlayerType()==playerColor){
+<FONT ID="LN">822 </FONT><A NAME="822"></A>                            soundManager.play(SoundType.WIN);
+<FONT ID="LN">823 </FONT><A NAME="823"></A>                        }
+<FONT ID="LN">824 </FONT><A NAME="824"></A>                        <FONT ID="Else">else</FONT>{
+<FONT ID="LN">825 </FONT><A NAME="825"></A>                            soundManager.play(SoundType.LOSE);
+<FONT ID="LN">826 </FONT><A NAME="826"></A>                        }
+<FONT ID="LN">827 </FONT><A NAME="827"></A>                        
+<FONT ID="LN">828 </FONT><A NAME="828"></A>                        <FONT ID="If">if</FONT>(tLabel1!=<FONT ID="Null">null</FONT>)endTable.add(tLabel1).space(<FONT ID="IntegerLiteral">10</FONT>);
+<FONT ID="LN">829 </FONT><A NAME="829"></A>                        <FONT ID="If">if</FONT>(tLabel2!=<FONT ID="Null">null</FONT>)endTable.add(tLabel2).space(<FONT ID="IntegerLiteral">10</FONT>);
+<FONT ID="LN">830 </FONT><A NAME="830"></A>                        <FONT ID="If">if</FONT>(tLabel3!=<FONT ID="Null">null</FONT>)endTable.add(tLabel3).space(<FONT ID="IntegerLiteral">10</FONT>);
+<FONT ID="LN">831 </FONT><A NAME="831"></A>                        <FONT ID="If">if</FONT>(tLabel4!=<FONT ID="Null">null</FONT>)endTable.add(tLabel4).space(<FONT ID="IntegerLiteral">10</FONT>);
+<FONT ID="LN">832 </FONT><A NAME="832"></A>                        <FONT ID="If">if</FONT>(tLabel5!=<FONT ID="Null">null</FONT>)endTable.add(tLabel5).space(<FONT ID="IntegerLiteral">10</FONT>);
+<FONT ID="LN">833 </FONT><A NAME="833"></A>                        endTable.row();
+<FONT ID="LN">834 </FONT><A NAME="834"></A>                    }
+<FONT ID="LN">835 </FONT><A NAME="835"></A>                    
+<FONT ID="LN">836 </FONT><A NAME="836"></A>                    <FONT ID="If">if</FONT>(playerName.equals(roomInfo.getAdminName())){
+<FONT ID="LN">837 </FONT><A NAME="837"></A><FONT ID="SingleLineComment">//                      TextButton nextRoundB = new TextButton("Start next round", tSkin);
+<FONT ID="LN">838 </FONT><A NAME="838"></A></FONT><FONT ID="SingleLineComment">//                      nextRoundB.addListener(new ClickListener(){
+<FONT ID="LN">839 </FONT><A NAME="839"></A></FONT><FONT ID="SingleLineComment">//                          @Override
+<FONT ID="LN">840 </FONT><A NAME="840"></A></FONT><FONT ID="SingleLineComment">//                          public void clicked(InputEvent event, float x, float y) {
+<FONT ID="LN">841 </FONT><A NAME="841"></A></FONT><FONT ID="SingleLineComment">//                              clonesClient.send(new MoveRoom(ActionTypeMoveRoom.RESTART_GAME, null, null));
+<FONT ID="LN">842 </FONT><A NAME="842"></A></FONT><FONT ID="SingleLineComment">//                          }
+<FONT ID="LN">843 </FONT><A NAME="843"></A></FONT><FONT ID="SingleLineComment">//                      });
+<FONT ID="LN">844 </FONT><A NAME="844"></A></FONT><FONT ID="SingleLineComment">//                      endTable.add(nextRoundB).colspan(2);
+<FONT ID="LN">845 </FONT><A NAME="845"></A></FONT>                        
+<FONT ID="LN">846 </FONT><A NAME="846"></A>                        TextButton endGameB = <FONT ID="New">new</FONT> TextButton(<FONT ID="StringLiteral">"End Game"</FONT>, tSkin, <FONT ID="StringLiteral">"dark"</FONT>);
+<FONT ID="LN">847 </FONT><A NAME="847"></A>                        endGameB.addListener(<FONT ID="New">new</FONT> ClickListener(){
+<FONT ID="LN">848 </FONT><A NAME="848"></A>                            @Override
+<FONT ID="LN">849 </FONT><A NAME="849"></A>                            <FONT ID="Public">public</FONT> <FONT ID="Void">void</FONT> clicked(InputEvent event, <FONT ID="Float">float</FONT> x, <FONT ID="Float">float</FONT> y) {
+<FONT ID="LN">850 </FONT><A NAME="850"></A>                                clonesClient.send(<FONT ID="New">new</FONT> <A HREF="../../../../com/luke/clones/network/communication/ActionTypeMoveRoom.java.html">MoveRoom</A>(ActionTypeMoveRoom.STOP_GAME, <FONT ID="Null">null</FONT>, <FONT ID="Null">null</FONT>));
+<FONT ID="LN">851 </FONT><A NAME="851"></A>                            }
+<FONT ID="LN">852 </FONT><A NAME="852"></A>                        });
+<FONT ID="LN">853 </FONT><A NAME="853"></A><FONT ID="SingleLineComment">//                      endTable.add(endGameB).colspan(2);
+<FONT ID="LN">854 </FONT><A NAME="854"></A></FONT><FONT ID="SingleLineComment">//                      endTable.add();
+<FONT ID="LN">855 </FONT><A NAME="855"></A></FONT>                        endTable.add(endGameB).colspan(<FONT ID="IntegerLiteral">5</FONT>).minSize(Config.width*<FONT ID="IntegerLiteral">1</FONT>/<FONT ID="IntegerLiteral">4</FONT>-<FONT ID="IntegerLiteral">6</FONT>, <FONT ID="IntegerLiteral">25</FONT>).spaceTop(<FONT ID="IntegerLiteral">6</FONT>).spaceBottom(<FONT ID="IntegerLiteral">6</FONT>);
+<FONT ID="LN">856 </FONT><A NAME="856"></A>                        endTable.row();
+<FONT ID="LN">857 </FONT><A NAME="857"></A>                    }
+<FONT ID="LN">858 </FONT><A NAME="858"></A>                    <FONT ID="Else">else</FONT>{
+<FONT ID="LN">859 </FONT><A NAME="859"></A>                        TextButton leaveRoomB = <FONT ID="New">new</FONT> TextButton(<FONT ID="StringLiteral">"Leave room"</FONT>, tSkin, <FONT ID="StringLiteral">"dark"</FONT>);
+<FONT ID="LN">860 </FONT><A NAME="860"></A>                        leaveRoomB.addListener(<FONT ID="New">new</FONT> ClickListener(){
+<FONT ID="LN">861 </FONT><A NAME="861"></A>                            @Override
+<FONT ID="LN">862 </FONT><A NAME="862"></A>                            <FONT ID="Public">public</FONT> <FONT ID="Void">void</FONT> clicked(InputEvent event, <FONT ID="Float">float</FONT> x, <FONT ID="Float">float</FONT> y) {
+<FONT ID="LN">863 </FONT><A NAME="863"></A>                                clonesClient.send(<FONT ID="New">new</FONT> <A HREF="../../../../com/luke/clones/network/communication/ActionTypeMoveRoom.java.html">MoveRoom</A>(ActionTypeMoveRoom.LEAVE, <FONT ID="Null">null</FONT>, <FONT ID="Null">null</FONT>));
+<FONT ID="LN">864 </FONT><A NAME="864"></A>                            }
+<FONT ID="LN">865 </FONT><A NAME="865"></A>                        });
+<FONT ID="LN">866 </FONT><A NAME="866"></A>                        endTable.add(leaveRoomB).colspan(<FONT ID="IntegerLiteral">5</FONT>).minSize(Config.width*<FONT ID="IntegerLiteral">1</FONT>/<FONT ID="IntegerLiteral">4</FONT>-<FONT ID="IntegerLiteral">6</FONT>, <FONT ID="IntegerLiteral">25</FONT>).spaceTop(<FONT ID="IntegerLiteral">6</FONT>).spaceBottom(<FONT ID="IntegerLiteral">6</FONT>);
+<FONT ID="LN">867 </FONT><A NAME="867"></A>                        endTable.row();
+<FONT ID="LN">868 </FONT><A NAME="868"></A>                    }
+<FONT ID="LN">869 </FONT><A NAME="869"></A>                    
+<FONT ID="LN">870 </FONT><A NAME="870"></A>                    prepareNextRoundAutoStart();
+<FONT ID="LN">871 </FONT><A NAME="871"></A>                    
+<FONT ID="LN">872 </FONT><A NAME="872"></A>                    endTable.add(nextRoundAutoStartTimeLabel).colspan(<FONT ID="IntegerLiteral">5</FONT>);
+<FONT ID="LN">873 </FONT><A NAME="873"></A>                    
+<FONT ID="LN">874 </FONT><A NAME="874"></A><FONT ID="SingleLineComment">//                  mainStage.addActor(endTable);
+<FONT ID="LN">875 </FONT><A NAME="875"></A></FONT>                    messageStage.addActor(endTable);
+<FONT ID="LN">876 </FONT><A NAME="876"></A>                    endTable.toFront();
+<FONT ID="LN">877 </FONT><A NAME="877"></A><FONT ID="SingleLineComment">//          }
+<FONT ID="LN">878 </FONT><A NAME="878"></A></FONT>                 }});
+<FONT ID="LN">879 </FONT><A NAME="879"></A>        }
+<FONT ID="LN">880 </FONT><A NAME="880"></A>        <FONT ID="If">if</FONT>(obj <FONT ID="InstanceOf">instanceof</FONT> <A HREF="../../../../com/luke/clones/network/communication/GameStart.java.html">GameStart</A>){
+<FONT ID="LN">881 </FONT><A NAME="881"></A>            <FONT ID="Final">final</FONT> <A HREF="../../../../com/luke/clones/network/communication/GameStart.java.html">GameStart</A> gameStart = (<A HREF="../../../../com/luke/clones/network/communication/GameStart.java.html">GameStart</A>) obj;
+<FONT ID="LN">882 </FONT><A NAME="882"></A>            Gdx.app.postRunnable(<FONT ID="New">new</FONT> Runnable() {
+<FONT ID="LN">883 </FONT><A NAME="883"></A>            <FONT ID="Public">public</FONT> <FONT ID="Void">void</FONT> run() {
+<FONT ID="LN">884 </FONT><A NAME="884"></A>                <FONT ID="SingleLineComment">//may cause errors
+<FONT ID="LN">885 </FONT><A NAME="885"></A></FONT>                <FONT ID="If">if</FONT>(endTable!=<FONT ID="Null">null</FONT>) endTable.remove();
+<FONT ID="LN">886 </FONT><A NAME="886"></A>                construct(clonesClient, gameStart.getMap(), gameStart.getPlayerColor(),gameStart.getToken(), gameStart.getRoomInfo(), playerName, startScreen, gameStart.getPlayerTypeOrder(), <FONT ID="True">true</FONT>);
+<FONT ID="LN">887 </FONT><A NAME="887"></A>            }});
+<FONT ID="LN">888 </FONT><A NAME="888"></A>        }
+<FONT ID="LN">889 </FONT><A NAME="889"></A><FONT ID="SingleLineComment">//      if(obj instanceof MessageShowRequest){
+<FONT ID="LN">890 </FONT><A NAME="890"></A></FONT><FONT ID="SingleLineComment">//          MessageShowRequest messageShowRequest = (MessageShowRequest) obj;
+<FONT ID="LN">891 </FONT><A NAME="891"></A></FONT><FONT ID="SingleLineComment">//          if(messageShowRequest.getMessageToShow()==MessageToShowType.ONE_OF_PLAYERS_LEFT_ROOM){
+<FONT ID="LN">892 </FONT><A NAME="892"></A></FONT><FONT ID="SingleLineComment">//              QuickMessageManager.showMessageOnSpecifiedStage(QuickMessagePresets.ONE_OF_PLAYERS_LEFT_ROOM.getQuickMessage(), mainStage);
+<FONT ID="LN">893 </FONT><A NAME="893"></A></FONT><FONT ID="SingleLineComment">//          }
+<FONT ID="LN">894 </FONT><A NAME="894"></A></FONT><FONT ID="SingleLineComment">//          else if(messageShowRequest.getMessageToShow()==MessageToShowType.ADMIN_STOPPED){
+<FONT ID="LN">895 </FONT><A NAME="895"></A></FONT><FONT ID="SingleLineComment">//              QuickMessageManager.showMessageOnSpecifiedStage(QuickMessagePresets.ADMIN_STOPPED.getQuickMessage(), mainStage);
+<FONT ID="LN">896 </FONT><A NAME="896"></A></FONT><FONT ID="SingleLineComment">//          }
+<FONT ID="LN">897 </FONT><A NAME="897"></A></FONT><FONT ID="SingleLineComment">//      }
+<FONT ID="LN">898 </FONT><A NAME="898"></A></FONT>    }
+<FONT ID="LN">899 </FONT><A NAME="899"></A>    
+<FONT ID="LN">900 </FONT><A NAME="900"></A>    <FONT ID="Private">private</FONT> <FONT ID="Int">int</FONT> getPlayerPlace(<A HREF="../../../../com/luke/clones/model/PlayerScore.java.html">PlayerScore</A>[] playerScore) {
+<FONT ID="LN">901 </FONT><A NAME="901"></A>        <FONT ID="For">for</FONT>(<FONT ID="Int">int</FONT> i=<FONT ID="IntegerLiteral">0</FONT>; i&lt;playerScore.length; i++){
+<FONT ID="LN">902 </FONT><A NAME="902"></A>            <FONT ID="If">if</FONT>(playerScore[i].getPlayerType()==playerColor){
+<FONT ID="LN">903 </FONT><A NAME="903"></A>                <FONT ID="Return">return</FONT> i;
+<FONT ID="LN">904 </FONT><A NAME="904"></A>            }
+<FONT ID="LN">905 </FONT><A NAME="905"></A>        }
+<FONT ID="LN">906 </FONT><A NAME="906"></A>        <FONT ID="Return">return</FONT> -<FONT ID="IntegerLiteral">1</FONT>;
+<FONT ID="LN">907 </FONT><A NAME="907"></A>    }
+<FONT ID="LN">908 </FONT><A NAME="908"></A>    
+<FONT ID="LN">909 </FONT><A NAME="909"></A>    <FONT ID="Private">private</FONT> String getPlaceDescriptionByPlace(<FONT ID="Int">int</FONT> place){
+<FONT ID="LN">910 </FONT><A NAME="910"></A>        <FONT ID="Switch">switch</FONT>(place){
+<FONT ID="LN">911 </FONT><A NAME="911"></A>        <FONT ID="Case">case</FONT> <FONT ID="IntegerLiteral">0</FONT>:
+<FONT ID="LN">912 </FONT><A NAME="912"></A>            <FONT ID="Return">return</FONT> <FONT ID="StringLiteral">"You won!"</FONT>;
+<FONT ID="LN">913 </FONT><A NAME="913"></A>        <FONT ID="Case">case</FONT> <FONT ID="IntegerLiteral">1</FONT>:
+<FONT ID="LN">914 </FONT><A NAME="914"></A>            <FONT ID="Return">return</FONT> <FONT ID="StringLiteral">"You were 2nd"</FONT>;
+<FONT ID="LN">915 </FONT><A NAME="915"></A>        <FONT ID="Case">case</FONT> <FONT ID="IntegerLiteral">2</FONT>:
+<FONT ID="LN">916 </FONT><A NAME="916"></A>            <FONT ID="Return">return</FONT> <FONT ID="StringLiteral">"You were 3rd"</FONT>;
+<FONT ID="LN">917 </FONT><A NAME="917"></A>        <FONT ID="Case">case</FONT> <FONT ID="IntegerLiteral">3</FONT>:
+<FONT ID="LN">918 </FONT><A NAME="918"></A>            <FONT ID="Return">return</FONT> <FONT ID="StringLiteral">"You were 4th"</FONT>;
+<FONT ID="LN">919 </FONT><A NAME="919"></A>        <FONT ID="Default">default</FONT>:
+<FONT ID="LN">920 </FONT><A NAME="920"></A>            <FONT ID="Return">return</FONT> <FONT ID="StringLiteral">"Label error"</FONT>;
+<FONT ID="LN">921 </FONT><A NAME="921"></A>        }
+<FONT ID="LN">922 </FONT><A NAME="922"></A>    }
+<FONT ID="LN">923 </FONT><A NAME="923"></A>    
+<FONT ID="LN">924 </FONT><A NAME="924"></A>    <FONT ID="Private">private</FONT> <FONT ID="Synchronized">synchronized</FONT> <FONT ID="Void">void</FONT> prepareNextRoundAutoStart(){
+<FONT ID="LN">925 </FONT><A NAME="925"></A>            nextRoundAutoStartTimeMeasure.start();
+<FONT ID="LN">926 </FONT><A NAME="926"></A>            
+<FONT ID="LN">927 </FONT><A NAME="927"></A>            nextRoundAutoStartTimer = <FONT ID="New">new</FONT> Timer(<FONT ID="True">true</FONT>);
+<FONT ID="LN">928 </FONT><A NAME="928"></A>
+<FONT ID="LN">929 </FONT><A NAME="929"></A>            TimerTask hideMessageTask = <FONT ID="New">new</FONT> TimerTask() {
+<FONT ID="LN">930 </FONT><A NAME="930"></A>                @Override
+<FONT ID="LN">931 </FONT><A NAME="931"></A>                <FONT ID="Public">public</FONT> <FONT ID="Void">void</FONT> run() {
+<FONT ID="LN">932 </FONT><A NAME="932"></A>                    Gdx.app.postRunnable(<FONT ID="New">new</FONT> Runnable() {
+<FONT ID="LN">933 </FONT><A NAME="933"></A>                        <FONT ID="Public">public</FONT> <FONT ID="Void">void</FONT> run() {
+<FONT ID="LN">934 </FONT><A NAME="934"></A>                            updateNextRoundAutoStartTimeText();
+<FONT ID="LN">935 </FONT><A NAME="935"></A>                        }
+<FONT ID="LN">936 </FONT><A NAME="936"></A>                    });
+<FONT ID="LN">937 </FONT><A NAME="937"></A>                    <FONT ID="If">if</FONT>(nextRoundAutoStartTimeMeasure.getMeasuredTimeInMs()
+<FONT ID="LN">938 </FONT><A NAME="938"></A>                            &gt;=ConfigUtils.getNextRoundAutoStartTimeDependingOnNumberOfPlayers(roomInfo.getPlayerLimit())*<FONT ID="IntegerLiteral">1000</FONT>){
+<FONT ID="LN">939 </FONT><A NAME="939"></A>                        Gdx.app.postRunnable(<FONT ID="New">new</FONT> Runnable() {
+<FONT ID="LN">940 </FONT><A NAME="940"></A>                            <FONT ID="Public">public</FONT> <FONT ID="Void">void</FONT> run() {
+<FONT ID="LN">941 </FONT><A NAME="941"></A><FONT ID="SingleLineComment">//                              hideMessage();
+<FONT ID="LN">942 </FONT><A NAME="942"></A></FONT>                                nextRoundAutoStartTimer.cancel();
+<FONT ID="LN">943 </FONT><A NAME="943"></A>                            }
+<FONT ID="LN">944 </FONT><A NAME="944"></A>                        });
+<FONT ID="LN">945 </FONT><A NAME="945"></A>                    }
+<FONT ID="LN">946 </FONT><A NAME="946"></A>                }
+<FONT ID="LN">947 </FONT><A NAME="947"></A>            };
+<FONT ID="LN">948 </FONT><A NAME="948"></A>            
+<FONT ID="LN">949 </FONT><A NAME="949"></A>            nextRoundAutoStartTimer.scheduleAtFixedRate(hideMessageTask, <FONT ID="IntegerLiteral">0</FONT>, <FONT ID="IntegerLiteral">1000</FONT>);
+<FONT ID="LN">950 </FONT><A NAME="950"></A>    }
+<FONT ID="LN">951 </FONT><A NAME="951"></A>
+<FONT ID="LN">952 </FONT><A NAME="952"></A>    <FONT ID="Private">private</FONT> <FONT ID="Void">void</FONT> updateNextRoundAutoStartTimeText(){
+<FONT ID="LN">953 </FONT><A NAME="953"></A>            <FONT ID="Int">int</FONT> measuredTimeInSeconds = Math.round(nextRoundAutoStartTimeMeasure.getMeasuredTimeInMs()/<FONT ID="FloatPointLiteral">1000f</FONT>);
+<FONT ID="LN">954 </FONT><A NAME="954"></A>            <FONT ID="Int">int</FONT> timeToStart = ConfigUtils.getNextRoundAutoStartTimeDependingOnNumberOfPlayers(roomInfo.getPlayerLimit()) - measuredTimeInSeconds;
+<FONT ID="LN">955 </FONT><A NAME="955"></A>            nextRoundAutoStartTimeLabel.setText(<FONT ID="StringLiteral">"Next round starts in "</FONT>+timeToStart+<FONT ID="StringLiteral">"s"</FONT>);
+<FONT ID="LN">956 </FONT><A NAME="956"></A>    }
+<FONT ID="LN">957 </FONT><A NAME="957"></A>    
+<FONT ID="LN">958 </FONT><A NAME="958"></A>    @Override
+<FONT ID="LN">959 </FONT><A NAME="959"></A>    <FONT ID="Public">public</FONT> <FONT ID="Void">void</FONT> disconnected(Connection connection) {
+<FONT ID="LN">960 </FONT><A NAME="960"></A>        Gdx.app.postRunnable(<FONT ID="New">new</FONT> Runnable() {
+<FONT ID="LN">961 </FONT><A NAME="961"></A>            <FONT ID="Public">public</FONT> <FONT ID="Void">void</FONT> run() {
+<FONT ID="LN">962 </FONT><A NAME="962"></A>                startScreen.setToMainMenuWithMessage(QuickMessagePresets.CONNECTION_TO_SERVER_LOST.getQuickMessage());
+<FONT ID="LN">963 </FONT><A NAME="963"></A>            }
+<FONT ID="LN">964 </FONT><A NAME="964"></A>        });
+<FONT ID="LN">965 </FONT><A NAME="965"></A>        startScreen.getAndroidNativeHandler().showBannerAds();
+<FONT ID="LN">966 </FONT><A NAME="966"></A>    }
+<FONT ID="LN">967 </FONT><A NAME="967"></A>
+<FONT ID="LN">968 </FONT><A NAME="968"></A>    @Override
+<FONT ID="LN">969 </FONT><A NAME="969"></A>    <FONT ID="Public">public</FONT> <FONT ID="Void">void</FONT> idle(Connection connection) {
+<FONT ID="LN">970 </FONT><A NAME="970"></A>        
+<FONT ID="LN">971 </FONT><A NAME="971"></A>    }
+<FONT ID="LN">972 </FONT><A NAME="972"></A>    
+<FONT ID="LN">973 </FONT><A NAME="973"></A>}
+<FONT ID="LN">974 </FONT><A NAME="974"></A></pre>
+</BODY>
+</HTML>
