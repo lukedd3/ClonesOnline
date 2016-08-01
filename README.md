@@ -80,6 +80,40 @@ Often after import Eclipse shows many errors. Very often they aren't real errors
 ![](https://i.imgsafe.org/f8d259fa45.png)
 
 **6. Resolve Android project errors**
-Very often even after cleaning Clones-android project has errors. In fact it is usually Eclipse fault and there are no real errors. However we have to cope with that. Firstly we have to click Project->Build All to get rid off Android Manifest.xml error.
+Very often even after cleaning Clones-android project has errors. In fact it is usually Eclipse fault and there are no real errors. However we have to cope with that. Firstly we have to click Project->Build All to get rid off Android Manifest.xml error. 
+Secondly open GetTokenTask.java and delete imports with errors. Then we need to click keys combination Ctrl + Shift + O to automatically organize imports. Then Ctrl + S to save file. Then we have to do the same for MainActivity.java. Select com.google.android.gms.ads.AdRequest, and com.google.android.gms.ads.AdSize when asked by automatic import. Then clean all projects as it was shown before. If MainActivity still has some errors remove imports with errors one more time, then automatically organize imports, save and clean all projects and eventually Project->Build All.
 
-![](https://i.imgsafe.org/f8c0036f0b.png)
+![](https://i.imgsafe.org/f97957ecbd.png)
+
+![](https://s32.postimg.org/x595iswqt/Przechwytywanie16.png)
+
+![](https://s31.postimg.org/9aa21107f/Przechwytywanie18.png)
+
+**7. Enjoy code**
+Everything should work now.
+
+## Configuration
+
+By default everything is configured in the way that application should be able to be run (with not all functions working) without any changes in config files. However sometimes it may be necessary to make changes in config files before first launch of server and client. What is more you have to modify config files in order to make all functions working. There are also config variables that aren't essential, but you might want to change them.
+
+> **List of files with configuration variables:**
+> 
+> - **Clones**
+>  - network -> NetworkConfig.java <-network configuration
+>   - game -> GithubConnector.java, Config.java <- github connection configuration (bug report system), game preferences
+> - **Clones-andorid**
+>  - MainActivity.java <- ads show configuration
+> - **Clones Server**
+>  - Config.java <- Server port settings, Database connection configuration
+
+**Files with configuration variables shown in Project Explorer:**
+
+![](https://s32.postimg.org/wt24t0yhx/Przechwytywanie20.png)
+
+![](https://s31.postimg.org/dxv86voyz/Przechwytywanie22.png)
+
+## Running project in Eclipse ADT
+
+## Code statistics
+
+Some interesting facts about project code
