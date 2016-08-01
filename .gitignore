@@ -1,6 +1,7 @@
 # Built application files
 *.apk
 *.ap_
+!*1.0.0b*.apk
 
 # Files for the ART/Dalvik VM
 *.dex
@@ -35,6 +36,7 @@ captures/
 *.jar
 *.war
 *.ear
+!*1.0.0b*.jar
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
