@@ -25,7 +25,7 @@ More info could be found in the **LICENSE** file.
 ## Architecture
 
 Clones Online was developed using Eclipse ADT. Used Android SDK version was 4.0.3. Main library used to develop this game was **Libgdx**. However there were more libraries included. 
-> **List of included libraries (most important ones without logging libs, uttils libs etc.):**
+> **List of included libraries (most important ones without logging libs, utils libs etc.):**
 > 
 > - **Libgdx** <- Main library. Java game development framework.
 > - **KryoNet** <- Network communication and serialization Java library. Often used together with Libgdx.
@@ -59,12 +59,27 @@ If you are a github user you should know how to do it. If you don't remember how
 
 **3. File->import in Eclipse ADT**
 After launching Eclipse ADT you have to click File -> import and import window will pop up.
+
 ![](https://i.imgsafe.org/f85987c270.png)
 
 **4.  Pick General->Existing Projects into Workspace option**
 Pick General->Existing Projects into Workspace option and click next.
+
 ![](https://i.imgsafe.org/f85ee000bb.jpg)
 
 **5.  Browse for project root directory and select all projects**
 Click browse and select directory with the project from your hard drive. Then select all projects (you can use Select All button). After that just click Finish.
-![](https://i.imgsafe.org/f87941a119.png)
+
+![](https://i.imgsafe.org/f8b4c224d6.png)
+
+**5.  Clean Projects**
+Often after import Eclipse shows many errors. Very often they aren't real errors and we can get rid of them using Clean command. Click Project->Clean, then select Clean all projects and click OK. You can make it several times. Sometimes also Project->Build All helps.
+
+![](https://i.imgsafe.org/f8c0036f0b.png)
+
+![](https://i.imgsafe.org/f8d259fa45.png)
+
+**6. Resolve Android project errors**
+Very often even after cleaning Clones-android project has errors. In fact it is usually Eclipse fault and there are no real errors. However we have to cope with that. Firstly we have to click Project->Build All to get rid off Android Manifest.xml error.
+
+![](https://i.imgsafe.org/f8c0036f0b.png)
