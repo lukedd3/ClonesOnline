@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/Clones/libs/kryonet-2.21-all.jar"/>
+	<classpathentry kind="lib" path="/Clones/libs/commons-lang3-3.4-javadoc.jar"/>
+	<classpathentry kind="lib" path="/Clones/libs/commons-lang3-3.4.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Clones"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
