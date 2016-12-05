@@ -112,10 +112,3 @@ By default everything is configured in the way that application should be able t
 
 ![](https://s31.postimg.org/dxv86voyz/Przechwytywanie22.png)
 
-## Running project in Eclipse ADT
-
-## Code statistics
-
-Some interesting facts about project code
-
-14268 lines of code (without comments and libraries)
